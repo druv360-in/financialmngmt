@@ -5,7 +5,7 @@ import styled from "styled-components";
 // STYLED COMPONENTS (Cleaned of brittle positions)
 // ==========================================
 
-const MainOverlay = styled.div`
+const MainOverlay = styled.div` 
   position: fixed;
   top: 0;
   left: 0;

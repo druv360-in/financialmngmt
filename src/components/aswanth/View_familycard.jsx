@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 // =========================
 
 const ViewMain = styled.div`
-  /* Container styles */
+  /* Container styles */ 
 `;
 
 const BackBtn = styled.div`

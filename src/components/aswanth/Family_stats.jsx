@@ -10,7 +10,7 @@ const Card = styled.div`
   border: 1px solid rgb(230, 229, 229);
 
   /* MOBILE */
-
+ 
   @media (max-width: 768px) {
     left: 0px;
     top: 0px;

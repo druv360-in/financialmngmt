@@ -12,7 +12,7 @@ const HeadingCon = styled.div`
   @media (max-width: 768px) {
     left: 20px;
     top: 20px;
-  }
+  } 
 `;
 
 const Heading = styled.h2`
