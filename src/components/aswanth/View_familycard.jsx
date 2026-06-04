@@ -11,7 +11,7 @@ const ViewMain = styled.div`
   /* Container styles */ 
 `;
 
-const BackBtn = styled.div`
+const BackBtn = styled.div` 
   position: relative;
   left: 390px;
   top: 60px;

@@ -11,7 +11,7 @@ import Edit_family from "./Edit_family";
 const PageContainer = styled.div`
   width: 100%;
   min-height: 100vh; 
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(255, 255, 255); 
   box-sizing: border-box;
   padding: 40px 20px;
 `;

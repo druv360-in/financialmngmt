@@ -11,7 +11,7 @@ const Card = styled.div`
 
   /* MOBILE */
  
-  @media (max-width: 768px) {
+  @media (max-width: 768px) { 
     left: 0px;
     top: 0px;
     width: 90%;
