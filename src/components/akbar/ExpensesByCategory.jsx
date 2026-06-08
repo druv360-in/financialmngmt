@@ -16,7 +16,8 @@ export default function ExpensesByCategory() {
         1 bill • ₹120.50
       </div>
 
-      <table className="w-full border border-gray-200 text-xs">
+      <div className="overflow-x-auto">
+       <table className="min-w-[1000px] w-full border border-gray-200 text-xs whitespace-nowrap">
         <thead>
           <tr className="bg-gray-50">
             <th className="border border-gray-200 px-2 py-2 text-center">
@@ -89,7 +90,7 @@ export default function ExpensesByCategory() {
           </tr>
         </tbody>
       </table>
-
+      </div>
       <div className="bg-red-50 px-4 py-3 text-right">
         <div className="text-red-500 text-xs font-medium">
           Category Total

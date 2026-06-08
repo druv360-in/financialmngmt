@@ -16,7 +16,8 @@ export default function IncomeByCategory() {
         1 receipt • ₹1000.00
       </div>
 
-      <table className="w-full border border-gray-200 text-xs">
+      <div className="overflow-x-auto">
+       <table className="min-w-[850px] w-full border border-gray-200 text-xs whitespace-nowrap">
         <thead>
           <tr className="bg-gray-50">
             <th className="border border-gray-200 px-2 py-2 text-center">
@@ -81,7 +82,7 @@ export default function IncomeByCategory() {
           </tr>
         </tbody>
       </table>
-
+      </div>
       <div className="bg-green-50 px-4 py-3 text-right">
         <div className="text-green-600 text-xs font-medium">
           Category Total

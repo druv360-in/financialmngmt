@@ -3,12 +3,12 @@ import ExpensesByCategory from "./ExpensesByCategory";
 
 export default function CategoryWiseAnnualReport() {
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="w-full px-2 sm:px-4 lg:px-6 p-3 py-4">
 
       {/* Main Report Box */}
-      <div className="bg-white border border-gray-300 rounded-lg p-5 shadow-sm">
+      <div className="w-full bg-white border border-gray-300 rounded-lg p-3 md:p-5 shadow-sm">
 
-        <h1 className="text-2xl font-bold mb-1">
+        <h1 className="text-xl sm:text-2xl font-bold mb-1">
           Category-wise Annual Reports
         </h1>
 
@@ -25,7 +25,7 @@ export default function CategoryWiseAnnualReport() {
 
         <div className="border border-gray-200 rounded-md p-4 mb-4">
 
-          <div className="flex justify-between items-center mb-2">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-2">
             <h3 className="font-semibold text-sm">
               Monthly Collection
             </h3>
@@ -39,7 +39,8 @@ export default function CategoryWiseAnnualReport() {
             1 receipt • ₹750.00
           </div>
 
-          <table className="w-full border border-gray-200 text-xs">
+          <div className="overflow-x-auto">
+           <table className="min-w-[850px] w-full border border-gray-200 text-xs whitespace-nowrap">
             <thead>
               <tr className="bg-gray-50">
                 <th className="border border-gray-200 px-2 py-2 text-center">
@@ -102,6 +103,7 @@ export default function CategoryWiseAnnualReport() {
               </tr>
             </tbody>
           </table>
+          </div>
 
           <div className="bg-green-50 px-4 py-3 text-right">
             <div className="text-green-600 text-xs font-medium">
@@ -122,7 +124,7 @@ export default function CategoryWiseAnnualReport() {
 
         <div className="border border-gray-200 rounded-md p-4 mb-6">
 
-          <div className="flex justify-between items-center mb-2">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-2">
             <h3 className="font-semibold text-sm">
               Tithes & Offerings
             </h3>
@@ -136,7 +138,8 @@ export default function CategoryWiseAnnualReport() {
             1 receipt • ₹2500.00
           </div>
 
-          <table className="w-full border border-gray-200 text-xs">
+          <div className="overflow-x-auto">
+           <table className="min-w-[850px] w-full border border-gray-200 text-xs whitespace-nowrap">
             <thead>
               <tr className="bg-gray-50">
                 <th className="border border-gray-200 px-2 py-2 text-center">
@@ -199,6 +202,7 @@ export default function CategoryWiseAnnualReport() {
               </tr>
             </tbody>
           </table>
+          </div>
 
           <div className="bg-green-50 px-4 py-3 text-right">
             <div className="text-green-600 text-xs font-medium">
