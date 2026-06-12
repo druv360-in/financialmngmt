@@ -5,6 +5,7 @@ import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Edit_family from "./Edit_family";
+import { MdOutlineSearch } from "react-icons/md";
 
 // --- STYLED COMPONENTS ---
 
@@ -33,15 +34,15 @@ const SearchBarContainer = styled.div`
     left: 15px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 12px;
-    color: rgb(121, 121, 121);
+    font-size: 17px;
+    color: rgb(120, 120, 120);
   }
 `;
 
 const SearchInput = styled.input`
   background-color: rgb(241, 241, 241);
   width: 100%;
-  height: 36px;
+  height: 28px;
   border: none;
   border-radius: 6px;
   padding-left: 40px;
@@ -52,7 +53,7 @@ const SearchInput = styled.input`
 
   &::placeholder {
     font-size: 11px;
-    color: rgb(121, 121, 121);
+    color: rgb(120, 120, 120);
   }
 `;
 
@@ -192,7 +193,7 @@ function Ledger_format_table() {
         
         {/* Search Bar Block */}
         <SearchBarContainer>
-          <i className="fa-solid fa-magnifying-glass search-icon"></i>
+          <i className="fa-solid fa-magnifying-glass search-icon"><MdOutlineSearch /></i>
           <SearchInput
             type="text"
             placeholder="Search families by name or head of family..."

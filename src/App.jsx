@@ -12,6 +12,14 @@ import FinancialYearBanner from './components/binoj/FinancialYearBanner'
 import Sidemenu from './components/binoj/Sidemenu'
 import TotalDisplayCards from './components/binoj/TotalDisplayCards'
 
+// Aswanth
+import Add_editfamily from './components/aswanth/Add_editfamily'
+import Edit_family from './components/aswanth/Edit_family'
+import Families_members from './components/aswanth/Families_members'
+import Family_stats from './components/aswanth/Family_stats'
+import Ledger_format_table from './components/aswanth/Ledger_format_table'
+import View_familycard from './components/aswanth/View_familycard'
+import Families from './pages/Families'
 
 function App() {
   return (
@@ -23,6 +31,16 @@ function App() {
       <Route path="/FinancialYearBanner" element={<FinancialYearBanner />} />
       <Route path="/Sidemenu"            element={<Sidemenu />} />
       <Route path="/TotalDisplayCards"        element={<TotalDisplayCards />} />
+
+      {/* aswanth */}
+      <Route path="/families" element={<Families />} />
+      <Route path="/addfamily" element={<Add_editfamily />} />
+      <Route path="/editfamily" element={<Edit_family />} />
+      <Route path="/familymembers" element={<Families_members />} />
+      <Route path="/familystats" element={<Family_stats />} />
+      <Route path="/ledgerformat" element={<Ledger_format_table />} />
+      <Route path="/viewfamilycard" element={<View_familycard />} />
+      
     </Routes>
   )
 }

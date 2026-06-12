@@ -3,6 +3,10 @@ import styled from "styled-components";
 import Family_stats from "./Family_stats";
 import { useState } from "react";
 import Add_editfamily from "./Add_editfamily";
+import { LuUsers } from "react-icons/lu";
+import { LuUser } from "react-icons/lu";
+import { FaPlus } from "react-icons/fa6";
+
 
 const HeadingCon = styled.div`
   position: absolute;
@@ -124,7 +128,7 @@ function Families_members() {
       </HeadingCon>
 
       <AddFamilyBtn>
-  <PlusIcon className="fa-solid fa-plus"></PlusIcon>
+  <PlusIcon className="fa-solid fa-plus"><FaPlus /></PlusIcon>
 
   <Button onClick={() => setShowModal(true)}>
     Add Family
@@ -143,22 +147,14 @@ function Families_members() {
       <StatsBoxes>
 
         <Family_stats
-          icon={
-            <i
-              className="fa-regular fa-user"
-              style={{ color: "#2563eb", fontSize: "21px" }}
-            ></i>
-          }
+          icon={<LuUsers className="text-blue-600 text-xl mt-1 text-[25px]" />}
           heading="Total Families"
           value="2"
         />
 
         <Family_stats
           icon={
-            <i
-              className="fa-regular fa-user"
-              style={{ color: "#16a34a", fontSize: "21px" }}
-            ></i>
+            <LuUser className="text-green-600 text-xl mt-1 text-[25px]" />
           }
           heading="Total Members"
           value="5"
@@ -166,10 +162,7 @@ function Families_members() {
 
         <Family_stats
           icon={
-            <i
-              className="fa-regular fa-user"
-              style={{ color: "#9333ea", fontSize: "21px" }}
-            ></i>
+            <LuUsers className="text-purple-600 text-xl mt-1 text-[25px]" />
           }
           heading="Avg Members/Family"
           value="2.5"
