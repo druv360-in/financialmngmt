@@ -40,8 +40,9 @@ const SubHeading = styled.p`
 
 const AddFamilyBtn = styled.div`
   position: absolute;
-  left: 1245px;
+  left: 1255px;
   top: 50px;
+  width: 100px;
 
   @media (max-width: 768px) {
     left: 20px;
@@ -116,6 +117,22 @@ const StatsBoxes = styled.div`
 `;
 function Families_members() {
   const [showModal, setShowModal] = useState(false);
+
+  // 👇 Add here
+  const families = JSON.parse(localStorage.getItem("families")) || [];
+
+  const totalFamilies = families.length;
+
+  const totalMembers = families.reduce(
+    (total, family) => total + (family.members?.length || 0),
+    0
+  );
+
+  const avgMembers =
+    totalFamilies > 0
+      ? (totalMembers / totalFamilies).toFixed(1)
+      : 0;
+
   return (
     <div>
 
@@ -149,7 +166,7 @@ function Families_members() {
         <Family_stats
           icon={<LuUsers className="text-blue-600 text-xl mt-1 text-[25px]" />}
           heading="Total Families"
-          value="2"
+          value={totalFamilies}
         />
 
         <Family_stats
@@ -157,7 +174,7 @@ function Families_members() {
             <LuUser className="text-green-600 text-xl mt-1 text-[25px]" />
           }
           heading="Total Members"
-          value="5"
+           value={totalMembers}
         />
 
         <Family_stats
@@ -165,7 +182,7 @@ function Families_members() {
             <LuUsers className="text-purple-600 text-xl mt-1 text-[25px]" />
           }
           heading="Avg Members/Family"
-          value="2.5"
+          value={avgMembers}
         />
 
       </StatsBoxes>

@@ -82,7 +82,7 @@ const LedgerTable = styled.table`
   }
 
   tbody td {
-    padding: 12px 16px;
+    padding: 6px 16px;
     color: rgb(0, 0, 0);
     font-size: 12px;
     font-weight: 400;
@@ -103,6 +103,8 @@ const ActionButtonGroup = styled.div`
 `;
 
 const ViewButton = styled.button`
+position: relative;
+left: 0px;
   width: 100px;
   height: 28px;
   border: none;
@@ -124,6 +126,8 @@ const ViewButton = styled.button`
 `;
 
 const EditButton = styled.button`
+position: relative;
+left: 10px;
   width: 28px;
   height: 28px;
   border: none;
@@ -143,6 +147,8 @@ const EditButton = styled.button`
 `;
 
 const DeleteButton = styled.button`
+position: relative;
+left: 15px;
   width: 28px;
   height: 28px;
   border: none;
@@ -157,7 +163,7 @@ const DeleteButton = styled.button`
   transition: opacity 0.2s;
 
   &:hover {
-    opacity: 0.85;
+    opacity: 1.85;
   }
 `;
 
@@ -174,11 +180,20 @@ function Ledger_format_table() {
   const families = JSON.parse(localStorage.getItem("families")) || [];
 
   const deleteFamily = (id) => {
-    const updatedFamilies = families.filter((family) => family.id !== id);
-    localStorage.setItem("families", JSON.stringify(updatedFamilies));
-    // Soft UI refresh instead of a hard browser reload
-    window.location.reload();
-  };
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete this family?"
+  );
+
+  if (!confirmDelete) return;
+
+  const updatedFamilies = families.filter(
+    (family) => family.id !== id
+  );
+
+  localStorage.setItem("families", JSON.stringify(updatedFamilies));
+
+  window.location.reload();
+};
 
   // Filter data based on search input
   const filteredFamilies = families.filter(
