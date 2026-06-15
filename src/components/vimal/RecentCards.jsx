@@ -12,6 +12,7 @@ export default function RecentCards({
         grid-cols-1
         lg:grid-cols-2
         gap-6
+        items-start
       "
     >
 
@@ -20,6 +21,8 @@ export default function RecentCards({
         title="Recent Bills"
         bills={recentBills}
         variant="bill"
+        maxItems={3}
+        viewAllPath="/billspage"
       />
 
       {/* RECENT RECEIPTS */}
@@ -27,6 +30,8 @@ export default function RecentCards({
         title="Recent Receipts"
         bills={recentReceipts}
         variant="receipt"
+        maxItems={3}
+        viewAllPath="/receiptspage"
       />
 
     </div>

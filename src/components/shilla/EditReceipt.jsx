@@ -1,16 +1,56 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 
-export default function EditReceipt({ onClose }) {
-  const [form, setForm] = useState({
-    title: "",
-    payer: "",
-    category: "",
-    amount: "",
-    receiptDate: "",
-    paymentMethod: "",
-    description: "",
-  });
+export default function EditReceipt({
+  receipt,
+  setReceipts,
+  onClose,
+}) {
+const PREDEFINED_PAYER_VALUES = [
+  "john_smith",
+  "robert_johnson",
+];
+
+const [form, setForm] = useState({
+  title: receipt?.title || "",
+
+  payer: PREDEFINED_PAYER_VALUES.includes(receipt?.payer)
+    ? receipt.payer
+    : "other",
+
+  customPayer: PREDEFINED_PAYER_VALUES.includes(receipt?.payer)
+    ? ""
+    : receipt?.payer || "",
+
+  category:
+    receipt?.categories?.[0]?.category || "",
+
+  amount:
+    receipt?.categories?.[0]?.amount || "",
+
+  receiptDate: receipt?.date || "",
+
+  paymentMethod:
+    receipt?.paymentMethod || "",
+
+  description:
+    receipt?.description || "",
+});
+
+const PAYERS = [
+  {
+    label: "John Smith (Smith Family)",
+    value: "john_smith",
+  },
+  {
+    label: "Robert Johnson (Johnson Family)",
+    value: "robert_johnson",
+  },
+  {
+    label: "Other (Custom Name)",
+    value: "other",
+  },
+];
 
   const [errors, setErrors] = useState({});
 
@@ -54,23 +94,48 @@ export default function EditReceipt({ onClose }) {
     if (!form.paymentMethod) {
       newErrors.paymentMethod = "Payment method is required";
     }
-
+    if (
+  form.payer === "other" &&
+  !form.customPayer.trim()
+) {
+  newErrors.customPayer =
+    "Custom payer name is required";
+}
     setErrors(newErrors);
 
     return Object.keys(newErrors).length === 0;
   };
+const handleUpdate = () => {
+  if (!validate()) return;
 
-  const handleUpdate = () => {
-    const isValid = validate();
+  setReceipts((prev) =>
+    prev.map((r) =>
+      r.receiptNo === receipt.receiptNo
+        ? {
+  ...r,
+  title: form.title,
+ payer:
+  form.payer === "other"
+    ? form.customPayer
+    : form.payer,
+  amount: Number(form.amount),
+  date: form.receiptDate,
+  paymentMethod: form.paymentMethod,
+  description: form.description,
 
-    if (!isValid) return;
+  categories: [
+    {
+      category: form.category,
+      amount: Number(form.amount),
+    },
+  ],
+}
+        : r
+    )
+  );
 
-   
-    alert("Updated Successfully!");
-    
-    // Optionally close the modal after the user clicks "OK"
-    if (onClose) onClose(); 
-  };
+  onClose();
+};
 
   const currentAmount = 2500;
   const newTotal = parseFloat(form.amount) || 0;
@@ -125,55 +190,100 @@ export default function EditReceipt({ onClose }) {
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-medium text-gray-500">
-                Payer <span className="text-red-500">*</span>
-              </label>
+  <label className="text-xs font-medium text-gray-500">
+    Payer <span className="text-red-500">*</span>
+  </label>
 
-              <select
-                name="payer"
-                value={form.payer}
-                onChange={handleChange}
-                className={`rounded-lg px-3 py-2 text-sm outline-none border
-                ${
-                  errors.payer
-                    ? "border-red-500 bg-red-50"
-                    : "border-gray-200 bg-gray-50"
-                }`}
-              >
-                <option value="">Select payer</option>
-                <option value="john">John Smith</option>
-                <option value="jane">Jane Doe</option>
-              </select>
+  <select
+    name="payer"
+    value={form.payer}
+    onChange={handleChange}
+    className={`rounded-lg px-3 py-2 text-sm outline-none border ${
+      errors.payer
+        ? "border-red-500 bg-red-50"
+        : "border-gray-200 bg-gray-50"
+    }`}
+  >
+    <option value="">Select payer</option>
 
-              {errors.payer && (
-                <span className="text-red-500 text-xs">
-                  {errors.payer}
-                </span>
-              )}
-            </div>
+    {PAYERS.map((payer) => (
+      <option
+        key={payer.value}
+        value={payer.value}
+      >
+        {payer.label}
+      </option>
+    ))}
+  </select>
 
+  {errors.payer && (
+    <span className="text-red-500 text-xs">
+      {errors.payer}
+    </span>
+  )}
+
+  {form.payer === "other" && (
+    <>
+      <input
+        type="text"
+        name="customPayer"
+        value={form.customPayer}
+        onChange={handleChange}
+        placeholder="Enter custom payer name"
+        className={`mt-2 rounded-lg px-3 py-2 text-sm outline-none border ${
+          errors.customPayer
+            ? "border-red-500 bg-red-50"
+            : "border-gray-200 bg-gray-50"
+        }`}
+      />
+
+      {errors.customPayer && (
+        <span className="text-red-500 text-xs">
+          {errors.customPayer}
+        </span>
+      )}
+    </>
+  )}
+</div>
             
             <div className="flex flex-col gap-1">
               <label className="text-xs font-medium text-gray-500">
                 Category <span className="text-red-500">*</span>
               </label>
 
-              <select
-                name="category"
-                value={form.category}
-                onChange={handleChange}
-                className={`rounded-lg px-3 py-2 text-sm outline-none border
-                ${
-                  errors.category
-                    ? "border-red-500 bg-red-50"
-                    : "border-gray-200 bg-gray-50"
-                }`}
-              >
-                <option>Tithes & Offerings</option>
-                <option>Special Offerings</option>
-                <option>Monthly Collection</option>
-              </select>
-
+             <select
+  name="category"
+  value={form.category}
+  onChange={handleChange}
+  className={`rounded-lg px-3 py-2 text-sm outline-none border ${
+    errors.category
+      ? "border-red-500 bg-red-50"
+      : "border-gray-200 bg-gray-50"
+  }`}
+>
+  <option value="">Select Category</option>
+  <option value="Tithes & Offerings">
+    Tithes & Offerings
+  </option>
+  <option value="Special Offerings">
+    Special Offerings
+  </option>
+  <option value="Building Fund">
+    Building Fund
+  </option>
+  <option value="Mission Fund">
+    Mission Fund
+  </option>
+  <option value="Monthly Collection">
+    Monthly Collection
+  </option>
+  <option value="Donations">
+    Donations
+  </option>
+  <option value="Other">
+    Other
+  </option>
+</select>
               {errors.category && (
                 <span className="text-red-500 text-xs">
                   {errors.category}
@@ -266,35 +376,40 @@ export default function EditReceipt({ onClose }) {
               )}
             </div>
 
-            
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-medium text-gray-500">
-                Payment Method <span className="text-red-500">*</span>
-              </label>
+  <label className="text-xs font-medium text-gray-500">
+    Payment Method <span className="text-red-500">*</span>
+  </label>
 
-              <select
-                name="paymentMethod"
-                value={form.paymentMethod}
-                onChange={handleChange}
-                className={`rounded-lg px-3 py-2 text-sm outline-none border
-                ${
-                  errors.paymentMethod
-                    ? "border-red-500 bg-red-50"
-                    : "border-gray-200 bg-gray-50"
-                }`}
-              >
-                <option>Cash</option>
-                <option>Bank Transfer</option>
-                <option>Cheque</option>
-                <option>Online</option>
-              </select>
+  <select
+    name="paymentMethod"
+    value={form.paymentMethod}
+    onChange={handleChange}
+    className={`rounded-lg px-3 py-2 text-sm outline-none border ${
+      errors.paymentMethod
+        ? "border-red-500 bg-red-50"
+        : "border-gray-200 bg-gray-50"
+    }`}
+  >
+    <option value="">Select Payment Method</option>
+    <option value="Cash">Cash</option>
+    <option value="Check">Check</option>
+    <option value="Bank Transfer">
+      Bank Transfer
+    </option>
+    <option value="Credit Card">
+      Credit Card
+    </option>
+    <option value="Online">Online</option>
+    <option value="Other">Other</option>
+  </select>
 
-              {errors.paymentMethod && (
-                <span className="text-red-500 text-xs">
-                  {errors.paymentMethod}
-                </span>
-              )}
-            </div>
+  {errors.paymentMethod && (
+    <span className="text-red-500 text-xs">
+      {errors.paymentMethod}
+    </span>
+  )}
+</div>
 
             
             <div className="flex flex-col gap-1 col-span-2">

@@ -15,40 +15,20 @@ import Receiptcard from "./Receiptcard";
 //   onAddReceipt (func) — called when Add Receipt is clicked
 // =============================================
 
-const SAMPLE_RECEIPTS = [
-  {
-    id: "RCP1000",
-    category: "Tithes & Offerings",
-    amount: 2500,
-    overdue: false,
-  },
-  {
-    id: "RCP1001",
-    category: "Special Offerings",
-    amount: 1000,
-    overdue: true,
-  },
-  {
-    id: "RCP1002",
-    category: "Monthly Collection",
-    amount: 750,
-    overdue: false,
-  },
-  {
-    id: "RCP1003",
-    category: "Special Offerings",
-    amount: 1500,
-    overdue: true,
-  },
-];
 
-export default function Receiptsmanagement({ onAddReceipt }) {
+export default function Receiptsmanagement({ receipts,onAddReceipt }) {
   // ── Derived stats ────────────────────────────────
-  const totalReceipts = SAMPLE_RECEIPTS.length;
-  const totalIncome = SAMPLE_RECEIPTS.reduce((sum, r) => sum + r.amount, 0);
+  const totalReceipts = receipts.length;
+  const totalIncome =  receipts.reduce((sum, r) => sum + r.amount, 0);
   const averageReceipt = totalReceipts > 0 ? totalIncome / totalReceipts : 0;
-  const categories = [...new Set(SAMPLE_RECEIPTS.map((r) => r.category))].length;
-  const overdue = SAMPLE_RECEIPTS.filter((r) => r.overdue).length;
+ const categories = [
+  ...new Set(
+    receipts.map(
+      (r) => r.categories?.[0]?.category
+    )
+  ),
+].filter(Boolean).length;
+  const overdue =  receipts.filter((r) => r.overdue).length;
 
   const fmt = (val) =>
     `₹${Number(val).toLocaleString("en-IN", {
@@ -57,7 +37,7 @@ export default function Receiptsmanagement({ onAddReceipt }) {
     })}`;
 
   return (
-    <div className="bg-gray-50 min-h-screen px-8 py-7 box-border font-sans">
+    <div className="bg-gray-50  py-7 box-border font-sans">
 
       {/* ── Header ── */}
       <div className="flex justify-between items-start mb-6">
@@ -91,7 +71,7 @@ export default function Receiptsmanagement({ onAddReceipt }) {
       </div>
 
       {/* ── 5 × Receiptcard (Component 18) ── */}
-      <div className="flex gap-4">
+   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
         <Receiptcard
           label="Total Receipts"
           value={String(totalReceipts)}

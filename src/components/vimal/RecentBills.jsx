@@ -1,14 +1,16 @@
+import { Maximize } from "lucide-react";
 import BillsAndReceiptsCard from "../vimal/BillsAndReceiptsCard";
+import { useNavigate } from "react-router-dom";
 
 export default function RecentBills({
   title,
   bills,
   variant,
+  maxItems = 3,
+  viewAllPath,
 }) {
 
-  const handleViewAll = () => {
-    alert("View All page not implemented yet.");
-  };
+  const navigate = useNavigate();
 
   return (
     <div className="bg-white border border-gray-200 rounded-2xl p-5">
@@ -23,7 +25,7 @@ export default function RecentBills({
 
         {/* VIEW ALL */}
         <button
-          onClick={handleViewAll} 
+          onClick={() => navigate(viewAllPath)} 
           className="
             text-[13px]
             font-medium
@@ -41,7 +43,7 @@ export default function RecentBills({
       {/* CARD LIST */}
       <div className="space-y-3">
 
-        {bills.map((bill) => (
+        {bills.slice(0,maxItems).map((bill) => (
           <BillsAndReceiptsCard
             key={bill.id}
             title={bill.title}

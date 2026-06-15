@@ -11,7 +11,7 @@ function Income_Status({ item }) {
   return (
     <div className="max-w-md">
 
-      <div className="bg-white border border-gray-200 rounded-2xl px-5 py-4 shadow-sm hover:shadow-md transition-all duration-300">
+      <div className="bg-white border border-gray-200 hover:border-green-300   rounded-2xl px-5 py-4 bg-linear-to-br from-green-50 to-white transition-all  ">
 
         {/* CATEGORY */}
         <h2 className="text-sm font-semibold text-gray-700">
