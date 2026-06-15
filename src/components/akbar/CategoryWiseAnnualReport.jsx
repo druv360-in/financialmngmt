@@ -1,3 +1,5 @@
+import jsPDF from "jspdf";
+import { autoTable } from "jspdf-autotable";
 import IncomeByCategory from "./IncomeByCategory";
 import ExpensesByCategory from "./ExpensesByCategory";
 
@@ -236,9 +238,138 @@ const tithesTotal = tithesOfferingsData.reduce(
 
 export default function CategoryWiseAnnualReport() {
 
-  const handleDownload = () => {
-    alert("File has been downloading");
+  const handleDownloadMonthlyCollection = () => {
+    const doc = new jsPDF();
+
+    doc.text("Monthly Collection Report", 14, 15);
+
+    autoTable(doc, {
+  startY: 25,
+
+  head: [[
+    "SL",
+    "Receipt No",
+    "Date",
+    "Title",
+    "Payer",
+    "Payment Method",
+    "Amount",
+  ]],
+
+  body: monthlyCollectionData.map((item) => [
+    item.id,
+    item.receiptNo,
+    item.date,
+    item.title,
+    item.payer,
+    item.paymentMethod,
+    "Rs. " + item.amount,
+  ]),
+
+  theme: "grid",
+
+  styles: {
+    fontSize: 8,
+    cellPadding: 3,
+    lineColor: [220, 220, 220],
+    lineWidth: 0.1,
+  },
+
+  headStyles: {
+    fillColor: [249, 250, 251], // light gray
+    textColor: [0, 0, 0],
+    fontStyle: "bold",
+  },
+
+  alternateRowStyles: {
+    fillColor: [255, 255, 255],
+  },
+
+  columnStyles: {
+    6: {
+      halign: "right",
+      textColor: [22, 163, 74], // green amount
+    },
+  },
+});
+
+const finalY = doc.lastAutoTable.finalY;
+
+doc.setTextColor(0,0,0);
+doc.setFontSize(14);
+doc.text(
+  `Category Total: Rs. ${totalAmount}`,
+  14,
+  finalY + 12
+);
+
+    doc.save("MonthlyCollectionReport.pdf");
   };
+
+const handleDownloadTithes = () => {
+  const doc = new jsPDF();
+
+  doc.text("Tithes & Offerings Report", 14, 15);
+
+  autoTable(doc, {
+    startY: 25,
+
+    head: [[
+      "SL",
+      "Receipt No",
+      "Date",
+      "Title",
+      "Payer",
+      "Payment Method",
+      "Amount",
+    ]],
+
+    body: tithesOfferingsData.map((item) => [
+      item.id,
+      item.receiptNo,
+      item.date,
+      item.title,
+      item.payer,
+      item.paymentMethod,
+      "Rs. " + item.amount,
+    ]),
+
+    theme: "grid",
+
+    styles: {
+      fontSize: 8,
+      cellPadding: 3,
+      lineColor: [220, 220, 220],
+      lineWidth: 0.1,
+    },
+
+    headStyles: {
+      fillColor: [249, 250, 251],
+      textColor: [0, 0, 0],
+      fontStyle: "bold",
+    },
+
+    columnStyles: {
+      6: {
+        halign: "right",
+        textColor: [22, 163, 74],
+      },
+    },
+  });
+
+  const finalY = doc.lastAutoTable.finalY;
+
+  doc.setTextColor(0,0,0);
+  doc.setFontSize(14);
+
+  doc.text(
+    `Category Total: Rs. ${tithesTotal}`,
+    14,
+    finalY + 12
+  );
+
+  doc.save("TithesOfferingsReport.pdf");
+};  
 
   return (
     <div className="w-full px-2 sm:px-4 lg:px-6 p-3 py-4">
@@ -263,13 +394,16 @@ export default function CategoryWiseAnnualReport() {
 
         <div className="border border-gray-200 rounded-md p-4 mb-4">
 
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-2">
+          <div className="flex justify-between sm:items-center gap-2 mb-2">
             <h3 className="font-semibold text-sm">
               Monthly Collection
             </h3>
 
-            <button className="bg-black text-white px-3 py-1 rounded text-xs" onClick={handleDownload}>
-              Download PDF
+            <button
+             onClick={handleDownloadMonthlyCollection}
+             className="bg-black text-white px-3 py-1 rounded text-xs"
+             >
+             Download PDF
             </button>
           </div>
 
@@ -277,7 +411,7 @@ export default function CategoryWiseAnnualReport() {
              {monthlyCollectionData.length} receipts • ₹{totalAmount.toLocaleString()}
           </div>
 
-          <div className="overflow-x-auto">
+          <div className="overflow-auto max-h-[373px]">
            <table className="min-w-[850px] w-full border border-gray-200 text-xs whitespace-nowrap">
             <thead>
               <tr className="bg-gray-50">
@@ -367,12 +501,12 @@ export default function CategoryWiseAnnualReport() {
 
         <div className="border border-gray-200 rounded-md p-4 mb-6">
 
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-2">
+          <div className="flex justify-between sm:items-center gap-2 mb-2">
             <h3 className="font-semibold text-sm">
               Tithes & Offerings
             </h3>
 
-            <button className="bg-black text-white px-3 py-1 rounded text-xs" onClick={handleDownload}>
+            <button className="bg-black text-white px-3 py-1 rounded text-xs" onClick={handleDownloadTithes}>
               Download PDF
             </button>
           </div>
@@ -381,7 +515,7 @@ export default function CategoryWiseAnnualReport() {
              {tithesOfferingsData.length} receipts • ₹{tithesTotal.toLocaleString()}
           </div>
 
-          <div className="overflow-x-auto">
+          <div className="overflow-auto max-h-[373px]">
            <table className="min-w-[850px] w-full border border-gray-200 text-xs whitespace-nowrap">
             <thead>
               <tr className="bg-gray-50">

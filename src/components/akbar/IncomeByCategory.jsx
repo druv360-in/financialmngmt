@@ -1,3 +1,7 @@
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
+
 const specialOfferingsData = [
   {
     id: 1,
@@ -114,13 +118,71 @@ const specialOfferingsTotal = specialOfferingsData.reduce(
   0
 );
 
+const handleDownloadIncome = () => {
+  const doc = new jsPDF();
+
+  doc.text("Special Offerings Report", 14, 15);
+
+  autoTable(doc, {
+  startY: 25,
+
+  head: [[
+    "SL",
+    "Receipt No",
+    "Date",
+    "Title",
+    "Payer",
+    "Payment Method",
+    "Amount",
+  ]],
+
+  body: specialOfferingsData.map((item) => [
+    item.id,
+    item.receiptNo,
+    item.date,
+    item.title,
+    item.payer,
+    item.paymentMethod,
+    "Rs. " + item.amount,
+  ]),
+
+  theme: "grid",
+
+  styles: {
+    fontSize: 8,
+    cellPadding: 3,
+    lineColor: [220, 220, 220],
+    lineWidth: 0.1,
+  },
+
+  headStyles: {
+    fillColor: [249, 250, 251],
+    textColor: [0, 0, 0],
+    fontStyle: "bold",
+  },
+
+  columnStyles: {
+    6: {
+      halign: "right",
+      textColor: [22, 163, 74],
+    },
+  },
+});
+const finalY = doc.lastAutoTable.finalY;
+
+doc.text(
+  `Category Total: Rs. ${specialOfferingsTotal}`,
+  14,
+  finalY + 12
+);
+
+  doc.save("SpecialOfferingsReport.pdf");
+};
 
 
 export default function IncomeByCategory() {
 
-  const handleDownload = () => {
-    alert("File has been downloading");
-  };
+
   return (
     <div className="border border-gray-200 rounded-md p-4 mb-4">
 
@@ -129,7 +191,10 @@ export default function IncomeByCategory() {
           Special Offerings
         </h3>
 
-        <button className="bg-black text-white px-3 py-1 rounded text-xs" onClick={handleDownload}>
+        <button
+        onClick={handleDownloadIncome}
+        className="bg-black text-white px-3 py-1 rounded text-xs"
+        >
           Download PDF
         </button>
       </div>
@@ -138,7 +203,7 @@ export default function IncomeByCategory() {
         {specialOfferingsData.length} receipts • ₹{specialOfferingsTotal.toLocaleString()}
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-auto max-h-[373px]">
        <table className="min-w-[850px] w-full border border-gray-200 text-xs whitespace-nowrap">
         <thead>
           <tr className="bg-gray-50">

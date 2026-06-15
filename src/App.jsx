@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import { Routes, Route } from 'react-router-dom'
 
+import CategoryReportPage from './pages/CategoryReportPage'
 import Page5 from './pages/Page5'
 // vimal
 import BillsManagementPage from "./pages/BillsManagementPage"
@@ -12,6 +13,7 @@ import CategoryPage from './pages/categoryPage';
 function App() {
   return (
     <Routes>
+      <Route path="/CategoryReportPage" element={<CategoryReportPage />} />
       <Route path="/CategoryPage" element={<CategoryPage />} />
       <Route path="/receipts"               element={<Page5 />}  />
      

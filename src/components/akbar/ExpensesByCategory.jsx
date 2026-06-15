@@ -1,3 +1,6 @@
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
 const utilitiesData = [
   {
     id: 1,
@@ -127,9 +130,75 @@ const utilitiesTotal = utilitiesData.reduce(
 );
 export default function ExpensesByCategory() {
 
-  const handleDownload = () => {
-    alert("File has been downloading");
-  };
+
+const handleDownloadExpense = () => {
+  const doc = new jsPDF();
+
+  doc.text("Utilities Expense Report", 14, 15);
+
+  autoTable(doc, {
+    startY: 25,
+
+    head: [[
+      "SL",
+      "Bill No",
+      "Type",
+      "Date",
+      "Title",
+      "Vendor",
+      "Payment Method",
+      "Amount",
+    ]],
+
+    body: utilitiesData.map((item) => [
+      item.id,
+      item.billNo,
+      item.type,
+      item.date,
+      item.title,
+      item.vendor,
+      item.paymentMethod,
+      "Rs. " + item.amount,
+    ]),
+
+    theme: "grid",
+
+    styles: {
+      fontSize: 8,
+      cellPadding: 3,
+      lineColor: [220, 220, 220],
+      lineWidth: 0.1,
+    },
+
+    headStyles: {
+      fillColor: [249, 250, 251],
+      textColor: [0, 0, 0],
+      fontStyle: "bold",
+    },
+
+    columnStyles: {
+      7: {
+        halign: "right",
+        textColor: [220, 38, 38], // red amount
+      },
+    },
+  });
+
+  const finalY = doc.lastAutoTable.finalY;
+
+  doc.setTextColor(0,0,0);
+  doc.setFontSize(14);
+
+  doc.text(
+    `Category Total: Rs. ${utilitiesTotal}`,
+    14,
+    finalY + 12
+  );
+
+  doc.save("UtilitiesExpenseReport.pdf");
+};  
+
+
   return (
     <div className="border border-gray-200 rounded-md p-4">
 
@@ -139,18 +208,18 @@ export default function ExpensesByCategory() {
         </h3>
 
        <button
-       onClick={handleDownload}
-       className="bg-black text-white px-3 py-1 rounded text-xs"
-     >
-          Download PDF
-        </button>
+  onClick={handleDownloadExpense}
+  className="bg-black text-white px-3 py-1 rounded text-xs"
+>
+  Download PDF
+</button>
       </div>
 
       <div className="text-right text-xs text-gray-500 mb-2">
         {utilitiesData.length} bills • ₹{utilitiesTotal.toLocaleString()}
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-auto max-h-[373px]">
        <table className="min-w-[1000px] w-full border border-gray-200 text-xs whitespace-nowrap">
         <thead>
           <tr className="bg-gray-50">
