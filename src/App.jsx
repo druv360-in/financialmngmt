@@ -1,6 +1,7 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route } from "react-router-dom";
+import FamiliesPage from "./Pages/FamiliesPage";
 import './App.css';
-import { Routes, Route } from 'react-router-dom'
+
 
 import CategoryReportPage from './pages/CategoryReportPage'
 import Page5 from './pages/Page5'
@@ -13,6 +14,7 @@ import CategoryPage from './pages/categoryPage';
 function App() {
   return (
     <Routes>
+      <Route path="/families" element={<FamiliesPage />} />
       <Route path="/CategoryReportPage" element={<CategoryReportPage />} />
       <Route path="/CategoryPage" element={<CategoryPage />} />
       <Route path="/receipts"               element={<Page5 />}  />
@@ -22,5 +24,6 @@ function App() {
     </Routes>
   );
 }
+
 
 export default App;
