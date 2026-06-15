@@ -1,180 +1,233 @@
-// components/All_Receipts.jsx
-
 import { Search } from "lucide-react";
 import { useMemo, useState } from "react";
-
 import Monthly_Receipts from "./Monthly_Receipts";
 
-function All_Receipts() {
+function All_Receipts({  receipts,onAddReceipt , onEditReceipt, onDeleteReceipt})  {
+ 
+  const [search, setSearch] = useState("");
+  const [selectedYear, setSelectedYear] = useState("All Years");
+  const [selectedPayer, setSelectedPayer] = useState("All Payers");
 
-  // RECEIPTS DATA
-  const receipts = [
-    {
-      title: "Sunday Offering",
-      receiptNo: "RCP1000",
-      paymentMethod: "Cash",
-      payer: "Congregation",
-      category: "Tithes & Offerings",
-      date: "2026-04-13",
-      amount: 2500,
-      description:
-        "Weekly Sunday offering collection",
-    },
-
-    {
-      title: "Building Fund Donation",
-      receiptNo: "RCP1001",
-      paymentMethod: "Check",
-      payer: "John Smith",
-      category: "Special Offerings",
-      date: "2026-04-14",
-      amount: 1000,
-      description:
-        "Special donation for building renovation",
-    },
-
-    {
-      title: "Monthly Collection",
-      receiptNo: "RCP1002",
-      paymentMethod: "Cash",
-      payer: "John Smith",
-      category: "Monthly Collection",
-      date: "2026-04-15",
-      amount: 750,
-      description:
-        "Regular monthly church collection",
-    },
-
-    {
-      title: "Mission Support",
-      receiptNo: "RCP1003",
-      paymentMethod: "UPI",
-      payer: "David",
-      category: "Mission",
-      date: "2026-05-11",
-      amount: 2000,
-      description:
-        "Mission ministry support",
-    },
-
-    {
-      title: "Youth Ministry",
-      receiptNo: "RCP1004",
-      paymentMethod: "Card",
-      payer: "Samuel",
-      category: "Youth",
-      date: "2025-12-20",
-      amount: 3200,
-      description:
-        "Youth event sponsorship",
-    },
+  // YEARS
+  const years = [
+    "All Years",
+    ...new Set(
+      receipts.map((receipt) =>
+        new Date(receipt.date).getFullYear()
+      )
+    ),
   ];
 
-  // SEARCH STATE
-  const [search, setSearch] = useState("");
+  // PAYERS
+  const payers = [
+    "All Payers",
+    ...new Set(
+      receipts.map((receipt) => receipt.payer)
+    ),
+  ];
 
-  // MONTH STATE
-  const [selectedMonth, setSelectedMonth] = useState("April 2026");
+  // FILTERING
+  const filteredReceipts = receipts.filter(
+    (receipt) => {
+      const receiptYear =
+        new Date(receipt.date).getFullYear();
 
-  // ALL MONTHS
-  const months = useMemo(() => {
+      const matchesYear =
+        selectedYear === "All Years" ||
+        receiptYear === Number(selectedYear);
 
-    const uniqueMonths = [
-      ...new Set(
-        receipts.map((receipt) => {
+      const matchesPayer =
+        selectedPayer === "All Payers" ||
+        receipt.payer === selectedPayer;
 
-          return new Date(
-            receipt.date
-          ).toLocaleString(
-            "default",
-            {
-              month: "long",
-              year: "numeric",
-            }
-          );
-
-        })
-      ),
-    ];
-
-    return uniqueMonths;
-
-  }, []);
-
-  // FILTER RECEIPTS
-  const filteredReceipts =
-    receipts.filter((receipt) => {
-
-      // MONTH FILTER
-      const receiptMonth =
-        new Date(
-          receipt.date
-        ).toLocaleString(
-          "default",
-          {
-            month: "long",
-            year: "numeric",
-          }
-        );
-
-      const matchesMonth = receiptMonth === selectedMonth;
-
-      // SEARCH FILTER
-      const matchesSearch =  receipt.title.toLowerCase().includes(search.toLowerCase())
-
-        || receipt.payer.toLowerCase().includes(search.toLowerCase())
-
-        || receipt.category.toLowerCase().includes(search.toLowerCase())
-
-        || receipt.receiptNo.toLowerCase().includes(search.toLowerCase());
+      const matchesSearch =
+        receipt.title
+          .toLowerCase()
+          .includes(search.toLowerCase()) ||
+        receipt.payer
+          .toLowerCase()
+          .includes(search.toLowerCase()) ||
+        receipt.category
+          .toLowerCase()
+          .includes(search.toLowerCase()) ||
+        receipt.receiptNo
+          .toLowerCase()
+          .includes(search.toLowerCase());
 
       return (
-        matchesMonth &&
+        matchesYear &&
+        matchesPayer &&
         matchesSearch
       );
+    }
+  );
 
-    });
+  // GROUP BY MONTH
+  const groupedReceipts = useMemo(() => {
+    return filteredReceipts.reduce(
+      (groups, receipt) => {
+        const month = new Date(
+          receipt.date
+        ).toLocaleString("default", {
+          month: "long",
+          year: "numeric",
+        });
+
+        if (!groups[month]) {
+          groups[month] = [];
+        }
+
+        groups[month].push(receipt);
+
+        return groups;
+      },
+      {}
+    );
+  }, [filteredReceipts]);
+
+  // SORT MONTHS DESC
+  const sortedMonths = Object.entries(
+    groupedReceipts
+  ).sort(
+    ([monthA], [monthB]) =>
+      new Date(monthB) - new Date(monthA)
+  );
 
   return (
-
     <div className="space-y-6">
 
-      {/* SEARCH CARD */}
-      <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm">
+      {/* FILTER CARD */}
 
-        <div className="flex items-center gap-4">
+      <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-3">
+
+        <h2 className=" font-semibold text-gray-800 mb-8">
+          Filters
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+          {/* YEAR */}
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Filter by Year
+            </label>
+
+            <select
+              value={selectedYear}
+              onChange={(e) =>
+                setSelectedYear(e.target.value)
+              }
+              className="w-full bg-[#f5f5f5] border border-gray-200 rounded-xl px-4 py-3 outline-none"
+            >
+              {years.map((year) => (
+                <option
+                  key={year}
+                  value={year}
+                >
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* PAYER */}
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Filter by Payer / Family
+            </label>
+
+            <select
+              value={selectedPayer}
+              onChange={(e) =>
+                setSelectedPayer(e.target.value)
+              }
+              className="w-full bg-[#f5f5f5] border border-gray-200 rounded-xl px-4 py-3 outline-none"
+            >
+              {payers.map((payer) => (
+                <option
+                  key={payer}
+                  value={payer}
+                >
+                  {payer}
+                </option>
+              ))}
+            </select>
+          </div>
 
           {/* SEARCH */}
-          <div className="flex items-center gap-3 border border-gray-200 bg-[#fafafa] rounded-2xl px-4 py-4 flex-1">
 
-            <Search className="w-5 h-5 text-gray-400" />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Search
+            </label>
 
-            <input
-              type="text"
-              placeholder="Search receipts..."
-              value={search}
-              onChange={(e) =>
-                setSearch(e.target.value)
-              }
-              className="bg-transparent outline-none w-full text-sm"
-            />
+            <div className="flex items-center gap-3 bg-[#f5f5f5] border border-gray-200 rounded-xl px-4 py-3">
 
+              <Search className="w-5 h-5 text-gray-400" />
+
+              <input
+                type="text"
+                placeholder="Search receipts..."
+                value={search}
+                onChange={(e) =>
+                  setSearch(e.target.value)
+                }
+                className="bg-transparent outline-none w-full text-sm"
+              />
+
+            </div>
           </div>
 
         </div>
 
+        {/* CLEAR BUTTON */}
+
+        <button
+          onClick={() => {
+            setSelectedYear("All Years");
+            setSelectedPayer("All Payers");
+            setSearch("");
+          }}
+          className="mt-5 px-5 py-2 rounded-xl border border-gray-300 bg-white hover:bg-gray-50 transition"
+        >
+          Clear Filters
+        </button>
+
       </div>
 
-      {/* MONTHLY RECEIPTS */}
-      <Monthly_Receipts
-        selectedMonth={selectedMonth}
-        setSelectedMonth={setSelectedMonth}
-        months={months}
-        receipts={filteredReceipts}
-      />
+      {/* MONTH SECTIONS */}
+
+      {sortedMonths.length > 0 ? (
+  sortedMonths.map(([month, receipts]) => (
+    <Monthly_Receipts
+    key={month}
+    month={month}
+    receipts={receipts}
+    onEditReceipt={onEditReceipt}
+    onDeleteReceipt={onDeleteReceipt}  
+  />
+  ))
+) : (
+  <div className="bg-white border border-gray-200 rounded-3xl p-16 text-center">
+
+    <h3 className=" font-medium text-gray-500">
+      No receipts found
+    </h3>
+
+    <button
+      onClick={onAddReceipt}
+      className="mt-6 inline-flex items-center gap-2 px-5 py-3 border border-gray-300 rounded-xl bg-white hover:bg-gray-50 transition"
+    >
+      <span>+</span>
+      Add your first receipt
+    </button>
+
+  </div>
+)}
 
     </div>
-
   );
 }
 
