@@ -32,10 +32,10 @@ function BalanceItem({ label, value, highlighted, accent, icon, to }) {
 }
 
 export default function CurrentBalances({
-  openingCash = "₹0.00",
-  cashInHand = "₹0.00",
-  openingBank = "₹0.00",
-  bankBalance = "₹0.00",
+  openingCash = "₹10000.00",
+  cashInHand = "₹5000.00",
+  openingBank = "₹4000.00",
+  bankBalance = "₹6000.00",
 }) {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
@@ -43,7 +43,7 @@ export default function CurrentBalances({
         Current Balances
       </h2>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
         <BalanceItem label="Opening Cash Balance" value={openingCash} highlighted accent={{ bg: "bg-gray-50", border: "border-gray-400", text: "text-gray-600", textBold: "text-gray-700" }} icon={<Icon name="bank" size={15} className="text-gray-500" />} to="/cash-bank" />
         <BalanceItem label="Cash in Hand" value={cashInHand} highlighted accent={{ bg: "bg-green-50", border: "border-green-400", text: "text-green-600", textBold: "text-green-700" }} icon={<Icon name="cash" size={15} className="text-green-500" />} to="/cash-bank" />
         <BalanceItem label="Opening Bank Balance" value={openingBank} highlighted accent={{ bg: "bg-gray-50", border: "border-gray-400", text: "text-gray-600", textBold: "text-gray-700" }} icon={<Icon name="bank" size={15} className="text-gray-500" />} to="/ledger" />
