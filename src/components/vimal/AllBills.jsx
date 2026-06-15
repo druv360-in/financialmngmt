@@ -4,6 +4,8 @@ import MonthlyBills from "../vimal/MonthlyBills";
 
 export default function AllBills({
   groupedBills,
+  onEditBill,
+  onDeleteBill,
 }) {
 
   const [search, setSearch] = useState("");
@@ -82,6 +84,8 @@ export default function AllBills({
               key={group.month}
               month={group.month}
               bills={group.bills}
+              onEditBill={onEditBill}
+              onDeleteBill={onDeleteBill}
             />
 
           ))
