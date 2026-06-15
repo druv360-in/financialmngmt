@@ -10,17 +10,15 @@ export default function BillCard({
   dueDate,
   description,
   amount,
+  onEdit,
+  onDelete,
 }) {
   
   const handleEditButton = () => {
-    alert(
-      "Edit Bill functionality has not been implemented yet."
-    );
+    onEdit?.();
   };
   const handleDeleteButton = () => {
-    alert(
-      "Delete Bill functionality has not been implemented yet."
-    );
+    onDelete?.();
   };
   return (
 
