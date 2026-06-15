@@ -1,104 +1,85 @@
-import React, { useState } from "react";
-import { FiX } from "react-icons/fi";
+import React, { useState, useEffect } from 'react';
+import { FiX } from 'react-icons/fi';
 
-export default function EditCategory() {
-  // State
-  const [categoryName, setCategoryName] =
-    useState("Utilities");
+export default function EditCategory({ categoryData, onClose, onUpdate }) {
+  const [categoryName, setCategoryName] = useState('');
+  const [description, setDescription] = useState('');
 
-  const [description, setDescription] =
-    useState("Water, electricity, gas");
+  useEffect(() => {
+    if (categoryData) {
+      setCategoryName(categoryData.title || '');
+      setDescription(categoryData.description || '');
+    }
+  }, [categoryData]);
 
-  // Update Function
   const handleUpdateCategory = () => {
-    if (!categoryName || !description) {
-      alert("Please fill all fields");
+    if (!categoryName.trim()) {
+      alert('Please fill out the category name.');
       return;
     }
-
-    alert("Category Updated Successfully");
-  };
-
-  // Cancel Function
-  const handleCancel = () => {
-    setCategoryName("");
-    setDescription("");
+    if (onUpdate) {
+      onUpdate(categoryData.id, categoryName, description);
+    }
+    onClose();
   };
 
   return (
-    <div className="min-h-screen bg-[#f4f4f5] flex items-center justify-center p-5">
+    <div className="bg-white w-full max-w-[440px] rounded-[14px] p-5 relative font-sans antialiased shadow-xl border border-gray-100">
+      {/* Close Button */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 text-gray-400 hover:text-black transition-colors"
+      >
+        <FiX size={16} />
+      </button>
 
-      {/* Modal */}
-      <div className="bg-white w-full max-w-[520px] rounded-2xl shadow-2xl p-6 relative">
+      {/* Heading */}
+      <h2 className="text-[16px] font-bold text-[#0f172a] tracking-tight">
+        Edit Category
+      </h2>
 
-        {/* Close Button */}
-        <button className="absolute top-5 right-5 text-gray-500 hover:text-black transition">
-          <FiX size={20} />
-        </button>
+      {/* Form Fields */}
+      <div className="mt-4 space-y-3.5">
+        {/* Category Name Input */}
+        <div>
+          <label className="text-[12px] font-semibold text-[#0f172a]">
+            Category Name *
+          </label>
+          <input
+            type="text"
+            value={categoryName}
+            onChange={e => setCategoryName(e.target.value)}
+            className="w-full mt-1 border border-gray-200 rounded-[10px] px-3 py-2 text-[13px] text-[#0f172a] outline-none focus:border-slate-400 bg-[#f8fafc]"
+          />
+        </div>
 
-        {/* Heading */}
-        <h2 className="text-[32px] font-bold text-[#111827]">
-          Edit Category
-        </h2>
+        {/* Description Textarea */}
+        <div>
+          <label className="text-[12px] font-semibold text-[#0f172a]">
+            Description
+          </label>
+          <textarea
+            rows="3"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            className="w-full mt-1 border border-gray-200 rounded-[10px] px-3 py-2 text-[13px] text-[#0f172a] outline-none resize-none focus:border-slate-400 bg-[#f8fafc]"
+          ></textarea>
+        </div>
 
-        {/* Form */}
-        <div className="mt-6">
-
-          {/* Category Name */}
-          <div className="mb-5">
-
-            <label className="text-[15px] font-semibold text-[#111827]">
-              Category Name *
-            </label>
-
-            <input
-              type="text"
-              value={categoryName}
-              onChange={(e) =>
-                setCategoryName(e.target.value)
-              }
-              className="w-full mt-2 border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#3b5bdb]"
-            />
-          </div>
-
-          {/* Description */}
-          <div>
-
-            <label className="text-[15px] font-semibold text-[#111827]">
-              Description
-            </label>
-
-            <textarea
-              rows="4"
-              value={description}
-              onChange={(e) =>
-                setDescription(e.target.value)
-              }
-              className="w-full mt-2 border border-gray-300 rounded-xl px-4 py-3 outline-none resize-none focus:border-[#3b5bdb]"
-            ></textarea>
-
-          </div>
-
-          {/* Buttons */}
-          <div className="flex items-center gap-3 mt-8">
-
-            {/* Update Button */}
-            <button
-              onClick={handleUpdateCategory}
-              className="flex-1 bg-[#020617] hover:bg-[#111827] text-white font-semibold py-3 rounded-xl transition"
-            >
-              Update Category
-            </button>
-
-            {/* Cancel Button */}
-            <button
-              onClick={handleCancel}
-              className="px-6 py-3 rounded-xl border border-gray-300 font-medium hover:bg-gray-100 transition"
-            >
-              Cancel
-            </button>
-
-          </div>
+        {/* Form Actions */}
+        <div className="flex items-center justify-end gap-2 pt-2">
+          <button
+            onClick={handleUpdateCategory}
+            className="bg-black hover:bg-zinc-900 text-white text-[12px] font-semibold px-4 h-[36px] rounded-[8px] transition-all"
+          >
+            Update Category
+          </button>
+          <button
+            onClick={onClose}
+            className="px-4 rounded-[8px] border border-gray-200 text-[12px] font-semibold h-[36px] text-slate-700 hover:bg-slate-50 transition-all"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>
