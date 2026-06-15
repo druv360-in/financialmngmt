@@ -144,7 +144,7 @@ left: 10px;
   &:hover {
     opacity: 0.85;
   }
-`;
+`; 
 
 const DeleteButton = styled.button`
 position: relative;

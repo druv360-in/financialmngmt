@@ -126,7 +126,7 @@ function Families_members() {
   const totalMembers = families.reduce(
     (total, family) => total + (family.members?.length || 0),
     0
-  );
+  ); 
 
   const avgMembers =
     totalFamilies > 0

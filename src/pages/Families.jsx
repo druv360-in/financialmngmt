@@ -22,7 +22,7 @@ function Families() {
       <div className="hidden lg:flex min-h-screen">
         <div className="w-64 shrink-0">
           <Sidemenu />
-        </div>
+        </div> 
 
         <div className="absolute z-100 ">
           <Families_members />

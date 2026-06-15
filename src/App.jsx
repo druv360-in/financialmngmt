@@ -3,7 +3,6 @@ import './App.css'
 
 
 // Aswanth
-
 import Families from './pages/Families'
 
 function App() {
@@ -13,7 +12,7 @@ function App() {
       {/* aswanth */}
       <Route path="/families" element={<Families />} />
       
-      
+  
     </Routes>
   )
 }
