@@ -10,18 +10,22 @@ import Edit_family from "./Edit_family";
 
 const PageContainer = styled.div`
   width: 100%;
-  min-height: 100vh; 
-  background-color: rgb(255, 255, 255); 
+  min-height: 100vh;
+  background-color: rgb(255, 255, 255);
   box-sizing: border-box;
-  padding: 40px 20px;
+  padding: 20px 40px;
 `;
 
 const ContentWrapper = styled.div`
-  max-width: 975px;
+  width: 100%;
+  max-width: none;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 25px;
+   position: relative;
+  left: -165px;
+  bottom: 20px;
 `;
 
 const SearchBarContainer = styled.div`
@@ -41,7 +45,7 @@ const SearchBarContainer = styled.div`
 const SearchInput = styled.input`
   background-color: rgb(241, 241, 241);
   width: 100%;
-  height: 36px;
+  height: 28px;
   border: none;
   border-radius: 6px;
   padding-left: 40px;
@@ -68,6 +72,7 @@ const LedgerInnerBox = styled.div`
 
 const LedgerTable = styled.table`
   width: 100%;
+  min-width: 920px; 
   border-collapse: collapse;
   text-align: left;
 
@@ -102,6 +107,8 @@ const ActionButtonGroup = styled.div`
 `;
 
 const ViewButton = styled.button`
+position: relative;
+left: 10px;
   width: 100px;
   height: 28px;
   border: none;
@@ -123,6 +130,8 @@ const ViewButton = styled.button`
 `;
 
 const EditButton = styled.button`
+position: relative;
+left: 20px;
   width: 28px;
   height: 28px;
   border: none;
@@ -142,6 +151,8 @@ const EditButton = styled.button`
 `;
 
 const DeleteButton = styled.button`
+position: relative;
+left: 30px;
   width: 28px;
   height: 28px;
   border: none;
