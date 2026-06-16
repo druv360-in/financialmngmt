@@ -1,6 +1,6 @@
 import { Pencil, Trash2 } from "lucide-react";
 
-function Receipt_Card({ receipts }) {
+function Receipt_Card({ receipts, onEditReceipt , onDeleteReceipt }){
 
   const defaultReceipts = [
     {
@@ -39,20 +39,20 @@ function Receipt_Card({ receipts }) {
   return (
     <div className="space-y-3">
 
-      {data.map((receipt, index) => (
+      {data.map((receipt) => (
 
         <div
-          key={index}
-          className="border border-gray-200 rounded-3xl bg-white px-5 py-4 hover:shadow-md transition-all"
+         key={receipt.receiptNo}
+          className="border border-gray-200 rounded-3xl bg-white px-5 py-4 hover:border-gray-300 transition-all"
         >
 
-          <div className="flex items-center justify-between gap-6">
+         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
 
             <div className="flex-1 min-w-0">
 
               <div className="flex flex-wrap items-center gap-2">
 
-                <h2 className="text-[21px] font-semibold text-gray-900">
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900">
                   {receipt.title}
                 </h2>
 
@@ -66,7 +66,7 @@ function Receipt_Card({ receipts }) {
 
               </div>
 
-              <div className="flex flex-wrap items-center gap-2 mt-3 text-[13px] text-gray-600">
+              <div className="flex flex-wrap items-center gap-2 mt-3 text-xs sm:text-sm text-gray-600">
 
                 <p>
                   Payer:
@@ -76,13 +76,14 @@ function Receipt_Card({ receipts }) {
                 </p>
 
                 <span className="text-gray-300">•</span>
-
-                <p>
-                  Category:
-                  <span className="font-medium ml-1">
-                    {receipt.category}
-                  </span>
-                </p>
+<p>
+  Category:
+  <span className="font-medium ml-1">
+    {receipt.categories
+      ?.map((item) => item.category)
+      .join(", ")}
+  </span>
+</p>
 
                 <span className="text-gray-300">•</span>
 
@@ -95,27 +96,32 @@ function Receipt_Card({ receipts }) {
 
               </div>
 
-              <p className="mt-3 text-[12px] text-gray-500 leading-relaxed">
+             <p className="mt-3 text-xs sm:text-sm text-gray-500 leading-relaxed">
                 {receipt.description}
               </p>
 
             </div>
 
-            <div className="flex flex-col items-end justify-center min-w-[120px]">
-
-              <h2 className="text-[24px] font-bold text-green-600 whitespace-nowrap">
-                ₹{receipt.amount}.00
+            <div className="flex flex-col items-start lg:items-end justify-center w-full lg:w-auto">
+             <h2 className="text-xl sm:text-2xl font-bold text-green-600 whitespace-nowrap">
+              ₹{Number(receipt.amount).toFixed(2)}
               </h2>
 
-              <div className="flex gap-2 mt-3">
+             <div className="flex gap-2 mt-3 self-start lg:self-auto">
 
-                <button className="w-9 h-9 border border-gray-300 rounded-xl flex items-center justify-center hover:bg-gray-100">
-                  <Pencil className="w-4 h-4 text-gray-700" />
-                </button>
-
-                <button className="w-9 h-9 border border-gray-300 rounded-xl flex items-center justify-center hover:bg-red-50">
-                  <Trash2 className="w-4 h-4 text-red-500" />
-                </button>
+               
+  <button 
+    className="w-9 h-9 border border-gray-300 rounded-xl flex items-center justify-center hover:bg-gray-100"
+    onClick={() => onEditReceipt(receipt)}  // 👈 add this
+  >
+    <Pencil className="w-4 h-4 text-gray-700" />
+  </button>
+                <button 
+    className="w-9 h-9 border border-gray-300 rounded-xl flex items-center justify-center hover:bg-red-50"
+    onClick={() => onDeleteReceipt(receipt.receiptNo)}  // 👈
+  >
+    <Trash2 className="w-4 h-4 text-red-500" />
+  </button>
 
               </div>
 

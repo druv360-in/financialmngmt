@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
 
-function AddEditPayment() {
-  const location = useLocation();
+function AddEditPayment({isOpen,setIsOpen,addPayment,editPayment,}) {
 
   const formConfig = {
     add: {
@@ -25,8 +23,9 @@ function AddEditPayment() {
     },
   };
 
-  const isEditMode = location.pathname === "/edit-payment";
-  const data = isEditMode ? formConfig.edit : formConfig.add;
+  const data = editPayment
+  ? formConfig.edit
+  : formConfig.add;
 
   const [amount, setAmount] = useState(data.amount);
   const [date, setDate] = useState(data.date);
@@ -47,24 +46,33 @@ function AddEditPayment() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      alert(
-        isEditMode
-          ? "Payment Updated Successfully!"
-          : "Payment Added Successfully!"
-      );
+
+      const paymentData = {
+        title: category,
+        amount: Number(amount),
+        dueDate: date,
+        method,
+        description,
+      };
+
+      addPayment(paymentData);
+
+      setIsOpen(false);
     }
   };
 
   const handleCancel = () => {
-    alert("Payment Cancelled!");
+    setIsOpen(false);
   };
 
   const handleClose = () => {
-    alert("Modal Closed!");
+    setIsOpen(false);
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="min-h-screen overflow-y-auto bg-gray-300 flex items-center justify-center p-4 sm:p-6">
+    <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
       <div className="bg-white w-full max-w-xl rounded-2xl shadow-xl p-4 sm:p-6 relative">
         <button
           onClick={handleClose}

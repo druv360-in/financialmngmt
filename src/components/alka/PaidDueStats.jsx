@@ -1,5 +1,4 @@
-const PaidDueStats = ({ dues }) => {
-
+const PaidDueStats = ({ dues = [] }) => {
   // Total Amount
   const totalAmount = dues.reduce(
     (total, due) => total + Number(due.amount),
@@ -18,14 +17,15 @@ const PaidDueStats = ({ dues }) => {
         p-4
         bg-[#EEF4FF]
         flex
-        items-center
-        justify-between
+        flex-col
+        md:flex-row
+        gap-4
+        md:items-center
+        md:justify-between
       "
     >
-
       {/* Left Side */}
       <div className="flex items-center gap-4">
-
         {/* Dollar Icon */}
         <div
           className="
@@ -36,6 +36,7 @@ const PaidDueStats = ({ dues }) => {
             flex
             items-center
             justify-center
+            shrink-0
           "
         >
           <span
@@ -50,34 +51,36 @@ const PaidDueStats = ({ dues }) => {
           </span>
         </div>
 
-        {/* Text */}
-        <div>
-
+        {/* Amount */}
+        <div className="min-w-0">
           <p className="text-gray-500 text-sm">
             Total Paid in 2026
           </p>
 
-          <h1 className="text-3xl font-bold text-gray-800">
+          <h1
+            className="
+              text-2xl
+              md:text-3xl
+              font-bold
+              text-gray-800
+              break-all
+            "
+          >
             ${totalAmount}
           </h1>
-
         </div>
-
       </div>
 
       {/* Right Side */}
-      <div className="text-right">
-
+      <div className="md:text-right border-t md:border-0 pt-3 md:pt-0">
         <p className="text-gray-500 text-sm">
           Total Payments
         </p>
 
-        <h1 className="text-3xl font-bold text-gray-800">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
           {totalPayments}
         </h1>
-
       </div>
-
     </div>
   );
 };

@@ -6,20 +6,22 @@ export const CategoryStatus = ({ title, count }) => {
       className="
         bg-white
         border
-        border-gray-200
-        rounded-[24px]
-        px-7
-        py-6
-        min-h-[130px]
+        border-[#e2e8f0]
+        rounded-[18px]
+        pl-5
+        pr-6
+        pt-6
+        pb-5
+        min-h-[105px]
         flex
         flex-col
-        justify-center
-        shadow-[0_1px_2px_rgba(0,0,0,0.03)]
+        justify-between
+        w-full
       "
     >
-      <p className="text-[15px] text-gray-500 font-medium">{title}</p>
+      <p className="text-[14px]  text-[#60656b]  tracking-wide">{title}</p>
 
-      <h2 className="text-[30px] font-bold text-[#0f172a] leading-none mt-3">
+      <h2 className="text-[24px] font-bold text-[#0f172a] leading-none mt-3">
         {count}
       </h2>
     </div>

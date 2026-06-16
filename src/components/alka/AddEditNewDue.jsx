@@ -115,9 +115,9 @@ const AddEditNewDue = ({
           rounded-2xl
           shadow-xl
           w-full
-          max-w-[540px]
+          max-w-135
           p-6
-          max-h-[100vh]
+          max-h-screen
         "
       >
 
