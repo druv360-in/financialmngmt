@@ -13,19 +13,17 @@ import DuesReportPage from './pages/DuesReportPage'
 import FinancialReportsPage from './pages/FinancialReportsPage'
 import FamiliesPage from "./Pages/FamiliesPage";
 import './App.css';
+import Families from "./pages/Families";
 
 
-import CategoryReportPage from './pages/CategoryReportPage'
-import Page5 from './pages/Page5'
-// vimal
-import BillsManagementPage from "./pages/BillsManagementPage"
-import DashboardPage from "./pages/DashboardPage";
 
-import CategoryPage from './pages/categoryPage';
+
 
 function App() {
   return (
     <Routes>
+      <Route path="/families" element={<Families />} />
+      
       <Route path="/Dashboard" element={<DashboardPage />}/>
       
       <Route path="/reports" element={<DuesReportPage />} />
