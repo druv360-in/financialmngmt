@@ -1,6 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import './App.css'
 
+import DashboardPage from "./pages/DashboardPage";
+import DuesReportPage from  "./pages/DuesReportPage";
+
 // Pages
 import CashBankPage from "./pages/CashBankPage";
 // sreekaanth
@@ -23,6 +26,10 @@ import CategoryPage from './pages/categoryPage';
 function App() {
   return (
     <Routes>
+      <Route path="/Dashboard" element={<DashboardPage />}/>
+      
+      <Route path="/reports" element={<DuesReportPage />} />
+        
 
       
       <Route path="/cashbankPage" element={<CashBankPage />} />
