@@ -18,6 +18,10 @@ const PAYMENT_METHODS = [
   'Online',
   'Other',
 ];
+const MONTHLY_AMOUNTS = {
+  john_smith: 250,
+  robert_johnson: 500,
+};
 
 const PAYERS = [
   { label: 'John Smith (Smith Family)', value: 'john_smith' },
@@ -58,6 +62,7 @@ function Dropdown({
     ? options.find(item => item.value === value)?.label
     : value;
 
+  
   return (
     <div ref={ref} className="relative">
       <button
@@ -111,7 +116,7 @@ function Dropdown({
   );
 }
 
-export default function AddReceipt({ onClose }) {
+export default function AddReceipt({ onClose , setReceipts}) {
   const [form, setForm] = useState({
     title: '',
     payer: '',
@@ -122,7 +127,83 @@ export default function AddReceipt({ onClose }) {
     paymentMethod: '',
     description: '',
   });
+  
+const [fromMonth, setFromMonth] = useState("");
+const [toMonth, setToMonth] = useState("");
 
+const calculateMonths = () => {
+  if (!fromMonth || !toMonth) return 0;
+
+  const start = new Date(fromMonth);
+  const end = new Date(toMonth);
+
+  const diff =
+    (end.getFullYear() - start.getFullYear()) * 12 +
+    (end.getMonth() - start.getMonth()) +
+    1;
+
+  return diff > 0 ? diff : 0;
+};
+
+const months = calculateMonths();
+
+const monthlyAmount =
+  MONTHLY_AMOUNTS[form.payer] || 0;
+
+  
+  const isCustomPayer = form.payer === "other";
+
+  const isAutoCalculated =
+  form.primaryCategory === "Monthly Collection" &&
+  !isCustomPayer &&
+  fromMonth &&
+  toMonth;
+
+
+const primaryAmount = isAutoCalculated
+  ? months * monthlyAmount
+  : Number(form.primaryAmount || 0);
+
+const handleAddReceipt = () => {
+  if (!validateForm()) return;
+
+  const receiptNo = `RCP${crypto.randomUUID()}`;
+const newReceipt = {
+  receiptNo,
+  title: form.title,
+  payer:
+    form.payer === "other"
+      ? form.customPayer
+      : form.payer,
+  paymentMethod: form.paymentMethod,
+  date: form.receiptDate,
+  fromMonth,
+  toMonth,
+  months,
+
+  description: form.description,
+
+  categories: [
+    {
+      category: form.primaryCategory,
+   amount: primaryAmount,
+    },
+
+    ...additionalCategories.map((category) => ({
+      category,
+      amount: Number(
+        additionalAmounts[category] || 0
+      ),
+    })),
+  ],
+
+  amount: totalAmount,
+};
+
+  setReceipts((prev) => [...prev, newReceipt]);
+
+  onClose();
+};
   const [additionalCategories, setAdditionalCategories] = useState([]);
   const [additionalAmounts, setAdditionalAmounts] = useState({});
   const [errors, setErrors] = useState({});
@@ -140,10 +221,23 @@ export default function AddReceipt({ onClose }) {
     if (!form.title.trim()) newErrors.title = true;
     if (!form.payer) newErrors.payer = true;
     if (!form.primaryCategory) newErrors.primaryCategory = true;
-    if (!form.primaryAmount) newErrors.primaryAmount = true;
+    if (
+  form.primaryCategory !== "Monthly Collection" &&
+  !form.primaryAmount
+) {
+  newErrors.primaryAmount = true;
+}
     if (!form.receiptDate) newErrors.receiptDate = true;
     if (!form.paymentMethod) newErrors.paymentMethod = true;
+   if (form.primaryCategory === "Monthly Collection") {
+  const hasPeriod = fromMonth && toMonth;
+  const hasManualAmount =
+    Number(form.primaryAmount) > 0;
 
+  if (!hasPeriod && !hasManualAmount) {
+    newErrors.primaryAmount = true;
+  }
+}
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -166,13 +260,12 @@ export default function AddReceipt({ onClose }) {
   const additionalOptions = CATEGORIES.filter(
     item => item !== form.primaryCategory
   );
-
-  const totalAmount =
-    (parseFloat(form.primaryAmount) || 0) +
-    additionalCategories.reduce(
-      (sum, item) => sum + (parseFloat(additionalAmounts[item]) || 0),
-      0
-    );
+const totalAmount =
+  primaryAmount +
+  additionalCategories.reduce(
+    (sum, item) => sum + (parseFloat(additionalAmounts[item]) || 0),
+    0
+  );
 
   return (
     <div
@@ -180,7 +273,7 @@ export default function AddReceipt({ onClose }) {
       onClick={e => e.target === e.currentTarget && onClose?.()}
     >
       {/* CARD - Form forced to precise 450px layout container matching the layout view */}
-      <div className="bg-white rounded-2xl shadow-2xl w-[450px] p-5 flex flex-col max-h-[92vh]">
+     <div className="bg-white rounded-2xl shadow-2xl w-[500px] max-w-[95vw] p-5 flex flex-col max-h-[92vh]">
         {/* HEADER */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-base text-[20px] font-semibold text-gray-950">
@@ -208,7 +301,7 @@ export default function AddReceipt({ onClose }) {
                 value={form.title}
                 onChange={handleChange}
                 placeholder="e.g., Sunday Offering"
-                className={`${inputClass} h-[36px] ${
+                className={`${inputClass} h-[44px] ${
                   errors.title ? 'border-red-500' : ''
                 }`}
               />
@@ -264,68 +357,157 @@ export default function AddReceipt({ onClose }) {
             />
           </div>
 
-          <div className="flex flex-col gap-0.5">
-            <label className={labelClass}>
-              Additional Categories (Optional)
+
+          
+
+
+
+
+  <div className="flex flex-col gap-0.5">
+    <label className={labelClass}>
+      Additional Categories (Optional)
+    </label>
+
+    <div className="border border-[#e5e7eb] rounded-xl p-3 bg-white space-y-2.5">
+      {additionalOptions.map(category => {
+        const checked =
+          additionalCategories.includes(category);
+
+        return (
+          <div
+            key={category}
+            className="flex flex-col gap-1.5"
+          >
+            <label className="flex items-center gap-2.5 cursor-pointer py-0.5">
+              <input
+                type="checkbox"
+                checked={checked}
+                onChange={() =>
+                  toggleAdditional(category)
+                }
+                className="w-4 h-4 accent-black rounded border-gray-300"
+              />
+
+              <span className="text-xs font-semibold">
+                {category}
+              </span>
             </label>
 
-            <div className="border border-[#e5e7eb] rounded-xl p-3 bg-white space-y-2.5">
-              {additionalOptions.map(category => {
-                const checked = additionalCategories.includes(category);
+            {checked && (
+              <div className="pl-6.5 pb-0.5">
+                <label className="block text-[10px] text-gray-400 mb-1">
+                  Amount for {category} *
+                </label>
 
-                return (
-                  <div key={category} className="flex flex-col gap-1.5">
-                    <label className="flex items-center gap-2.5 cursor-pointer py-0.5">
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={() => toggleAdditional(category)}
-                        className="w-4 h-4 accent-black rounded border-gray-300 cursor-pointer"
-                      />
-
-                      <span className="text-xs text-blac font-semibold">
-                        {category}
-                      </span>
-                    </label>
-
-                    {checked && (
-                      <div className="pl-6.5 pb-0.5">
-                        <label className="block text-[10px] text-gray-400 mb-1">
-                          Amount for {category} *
-                        </label>
-
-                        <input
-                          type="number"
-                          value={additionalAmounts[category] || '0.00'}
-                          onChange={e =>
-                            setAdditionalAmounts(prev => ({
-                              ...prev,
-                              [category]: e.target.value,
-                            }))
-                          }
-                          className={`${inputClass} h-[32px] bg-white`}
-                        />
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+                <input
+                  type="number"
+                  value={
+                    additionalAmounts[category] ||
+                    "0.00"
+                  }
+                  onChange={(e) =>
+                    setAdditionalAmounts(prev => ({
+                      ...prev,
+                      [category]:
+                        e.target.value,
+                    }))
+                  }
+                  className={`${inputClass} h-[32px] bg-white`}
+                />
+              </div>
+            )}
           </div>
+        );
+      })}
+    </div>
+  </div>
+
+  {form.primaryCategory === "Monthly Collection" &&
+ !isCustomPayer &&
+ monthlyAmount > 0 && (
+  <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-4">
+   <p className="text-sm font-medium text-sky-900">
+  Monthly Collection Amount:
+  <span className="ml-1 text-blue-900 font-semibold">
+    ₹{monthlyAmount.toFixed(2)}
+  </span>
+</p>
+  </div>
+)}
+
+  {form.primaryCategory === "Monthly Collection" &&
+ !isCustomPayer && (
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+     <label className={labelClass}>
+  From Date (Month/Year) *
+</label>
+
+      <input
+        type="month"
+        value={fromMonth}
+        onChange={(e) =>
+          setFromMonth(e.target.value)
+        }
+        className={inputClass}
+      />
+    </div>
+
+    <div><label className={labelClass}>
+  To Date (Month/Year) *
+</label>
+
+      <input
+        type="month"
+        value={toMonth}
+        onChange={(e) =>
+          setToMonth(e.target.value)
+        }
+        className={inputClass}
+      />
+    </div>
+  </div>
+)}
+{form.primaryCategory === "Monthly Collection" &&
+ !isCustomPayer &&
+ months > 0 && (
+    <div className="bg-green-50 border border-green-200 rounded-2xl p-4">
+     <p className="text-green-800">
+  <span className="font-semibold">
+    Period:
+  </span>{" "}
+  {months} month(s)
+  {" | "}
+  <span className="font-semibold">
+    Auto-calculated Amount:
+  </span>{" "}
+  ₹{primaryAmount.toFixed(2)}
+</p>
+    </div>
+)}
+
 
           <div className="grid grid-cols-2 gap-3.5">
             <div className="flex flex-col gap-0.5">
               <label className={labelClass}>Primary Category Amount *</label>
 
-              <input
-                type="number"
-                name="primaryAmount"
-                value={form.primaryAmount}
-                onChange={handleChange}
-                className={`${inputClass} h-[36px] ${
-                  errors.primaryAmount ? 'border-red-500' : ''
-                }`}
-              />
+             <input
+  type="number"
+  name="primaryAmount"
+  value={
+  isAutoCalculated
+    ? primaryAmount
+    : form.primaryAmount
+}
+  onChange={handleChange}
+  readOnly={isAutoCalculated}
+
+className={`${inputClass} h-[44px] ${
+  isAutoCalculated
+    ? "bg-gray-100 cursor-not-allowed"
+    : ""
+}`}
+/>
             </div>
 
             <div className="flex flex-col gap-0.5">
@@ -360,23 +542,21 @@ export default function AddReceipt({ onClose }) {
             />
           </div>
 
-          {form.primaryCategory && (
-            <div className="bg-purple-50 rounded-xl px-3 py-2 text-[11px] space-y-1">
-              <div className="flex justify-between">
-                <span className="text-purple-600 font-bold">
-                  Receipt Summary
-                </span>
+          
+          {totalAmount > 0 && (
+          <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-3">
+             <h3 className="text-indigo-900 font-semibold text-sm mb-2">
+  Receipt Summary
+</h3>
+<div className="flex justify-between">
+ <span className="font-medium text-indigo-900 text-xs">
+    • {form.primaryCategory} (Primary)
+  </span>
 
-                <span className="text-purple-400">Breakdown</span>
-              </div>
-
-              <div className="flex justify-between">
-                <span className="text-purple-400">{form.primaryCategory}:</span>
-
-                <span className="text-purple-600">
-                  ₹{parseFloat(form.primaryAmount || 0).toFixed(2)}
-                </span>
-              </div>
+  <span className="font-semibold text-indigo-900">
+    ₹{primaryAmount.toFixed(2)}
+  </span>
+</div>
 
               {additionalCategories.map(category => (
                 <div key={category} className="flex justify-between">
@@ -387,11 +567,13 @@ export default function AddReceipt({ onClose }) {
                   </span>
                 </div>
               ))}
-
+          
               <div className="flex justify-between border-t border-purple-200 pt-1 mt-1 font-bold">
-                <span className="text-purple-500">Total Amount:</span>
+               <span className="text-indigo-700">
+  Total Receipt Amount:
+</span>
 
-                <span className="text-purple-700">
+                <span className="text-indigo-700">
                   ₹{totalAmount.toFixed(2)}
                 </span>
               </div>
@@ -413,13 +595,11 @@ export default function AddReceipt({ onClose }) {
         </div>
 
         <div className="flex gap-3 mt-4 pt-3 border-t border-gray-100">
-          <button
-            type="button"
-            onClick={() => {
-              if (validateForm()) {
-                alert('Added New Receipt Successfully!');
-              }
-            }}
+       <button
+  type="button"
+  onClick={handleAddReceipt}
+
+
             className="flex-1 bg-gray-900 hover:bg-gray-800 text-white text-xs font-semibold rounded-xl py-2 transition"
           >
             Add Receipt

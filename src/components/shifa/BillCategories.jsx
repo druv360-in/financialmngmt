@@ -1,135 +1,167 @@
-import React from "react";
-import { FiEdit2, FiTrash2 } from "react-icons/fi";
-import { HiOutlineTag } from "react-icons/hi";
+import React, { useState, useEffect } from 'react'; // 💡 Added useEffect here
+import { FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { HiOutlineTag } from 'react-icons/hi';
+import EditCategory from './EditCategory';
 
-const categories = [
-  {
-    id: 1,
-    title: "Utilities",
-    description: "Water, electricity, gas",
-  },
-  {
-    id: 2,
-    title: "Maintenance",
-    description: "Building repairs and upkeep",
-  },
-  {
-    id: 3,
-    title: "Salaries",
-    description: "Staff salaries and wages",
-  },
-  {
-    id: 4,
-    title: "Supplies",
-    description: "Office and church supplies",
-  },
-  {
-    id: 5,
-    title: "Other",
-    description: "Miscellaneous expenses",
-  },
-];
+export default function BillCategories({
+  activeTab,
+  billCategories = [],
+  setBillCategories,
+  receiptCategories = [],
+  setReceiptCategories,
+}) {
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
-export default function BillCategories() {
+  const [toast, setToast] = useState({ show: false, message: '' });
 
-  // Edit Function
-  const handleEdit = (item) => {
+  useEffect(() => {
+    if (toast.show) {
+      const timer = setTimeout(() => {
+        setToast({ show: false, message: '' });
+      }, 2000);
 
-    alert(
-      `Edit Category\n\nCategory: ${item.title}\nDescription: ${item.description}`
-    );
+      return () => clearTimeout(timer);
+    }
+  }, [toast.show]);
 
+  const currentCategories =
+    (activeTab === 'bills' ? billCategories : receiptCategories) || [];
+
+  const handleUpdate = (id, newTitle, newDescription) => {
+    const updateMap = cat =>
+      cat.id === id
+        ? { ...cat, title: newTitle, description: newDescription }
+        : cat;
+
+    if (activeTab === 'bills') {
+      if (setBillCategories) setBillCategories(billCategories.map(updateMap));
+    } else {
+      if (setReceiptCategories)
+        setReceiptCategories(receiptCategories.map(updateMap));
+    }
+
+    setToast({ show: true, message: `"${newTitle}" successfully edited!` });
+    setSelectedCategory(null); // Closes the modal
   };
 
-  // Delete Function
-  const handleDelete = (item) => {
-
-    alert(
-      `${item.title} Deleted Successfully`
+  const handleDeleteClick = item => {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete "${item.title}"?`
     );
 
+    if (confirmDelete) {
+      if (activeTab === 'bills') {
+        if (setBillCategories)
+          setBillCategories(billCategories.filter(cat => cat.id !== item.id));
+      } else {
+        if (setReceiptCategories)
+          setReceiptCategories(
+            receiptCategories.filter(cat => cat.id !== item.id)
+          );
+      }
+
+      setToast({
+        show: true,
+        message: `"${item.title}" successfully deleted!`,
+      });
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#f5f5f5] p-6">
-
-      {/* Top Tabs */}
-      <div className="bg-[#e5e7eb] rounded-full flex overflow-hidden h-12">
-
-        <button className="flex-1 bg-white rounded-full text-[16px] font-semibold text-black shadow-sm">
-          Bill Categories
-        </button>
-
-        <button className="flex-1 text-[16px] font-medium text-black">
-          Receipt Categories
-        </button>
-
-      </div>
-
-      {/* Main Card */}
-      <div className="mt-8 bg-white border border-gray-200 rounded-3xl p-6">
-
-        {/* Heading */}
-        <h2 className="text-[28px] font-semibold text-[#111827] mb-8">
-          Bill Categories
-        </h2>
-
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-
-          {categories.map((item) => (
+    <div className="w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-3.5">
+        {currentCategories.length > 0 &&
+          currentCategories.map(item => (
             <div
               key={item.id}
-              className="border border-gray-200 rounded-2xl bg-white p-5 flex items-start justify-between"
+              className="border border-[#e2e8f0] rounded-[15px] bg-white p-4 flex items-start gap-3.5"
             >
-
-              {/* Left Side */}
-              <div className="flex items-start gap-4">
-
-                {/* Icon */}
-                <div className="w-12 h-12 rounded-2xl bg-[#dbeafe] flex items-center justify-center">
-                  <HiOutlineTag className="text-[#2563eb] text-[22px]" />
-                </div>
-
-                {/* Text */}
-                <div>
-
-                  <h3 className="text-[20px] font-semibold text-[#0f172a]">
-                    {item.title}
-                  </h3>
-
-                  <p className="text-[15px] text-gray-500 mt-1">
-                    {item.description}
-                  </p>
-
-                </div>
+              <div
+                className={`w-[42px] h-[42px] rounded-[12px] flex items-center justify-center flex-shrink-0 transition-colors duration-150 ${
+                  activeTab === 'bills' ? 'bg-[#dbeaff]' : 'bg-[#dbfce7]'
+                }`}
+              >
+                <HiOutlineTag
+                  className={`transition-colors duration-150 ${
+                    activeTab === 'bills' ? 'text-[#386ee0]' : 'text-[#38ad63]'
+                  }`}
+                  size={19}
+                />
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex items-center gap-2">
+              {/* 💡 Content wrapper changed to flex column on mobile, row on desktop */}
+              <div className="flex-1 min-w-0 flex flex-col md:flex-row md:items-start justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  {/* Title can now expand fully on mobile */}
+                  <p className="text-[18px] font-medium text-[#0f172a] leading-tight break-words">
+                    {item.title}
+                  </p>
+                  <p className="text-[14px] text-[#64748b] mt-1.5 tracking-wide whitespace-normal break-words leading-normal">
+                    {item.description}
+                  </p>
+                </div>
 
-                {/* Edit */}
-                <button
-                  onClick={() => handleEdit(item)}
-                  className="w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition"
-                >
-                  <FiEdit2 className="text-[18px] text-black" />
-                </button>
-
-                {/* Delete */}
-                <button
-                  onClick={() => handleDelete(item)}
-                  className="w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center hover:bg-red-50 transition"
-                >
-                  <FiTrash2 className="text-[18px] text-red-500" />
-                </button>
-
+                {/* 💡 Buttons move to the bottom on mobile, side on desktop */}
+                <div className="flex items-center gap-1.5 flex-shrink-0 self-end md:self-start mt-2 md:mt-0">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedCategory(item)}
+                    className="w-9 h-8 rounded-[8px] border border-[#e2e8f0] flex items-center justify-center text-[#94a3b8] hover:border-slate-400 hover:text-slate-700 transition-all duration-150"
+                  >
+                    <FiEdit2 size={16} strokeWidth={2.2} color="black" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteClick(item)}
+                    className="w-9 h-8 rounded-[8px] border border-[#e2e8f0] flex items-center justify-center text-[#ef4444] hover:bg-red-50 hover:border-red-100 transition-all duration-150"
+                  >
+                    <FiTrash2 size={16} strokeWidth={2.8} />
+                  </button>
+                </div>
               </div>
             </div>
           ))}
-
-        </div>
       </div>
+
+      {selectedCategory && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div
+            onClick={() => setSelectedCategory(null)}
+            className="fixed inset-0 bg-black/40 backdrop-blur-[1px]"
+          />
+          <div className="relative z-10 w-full flex justify-center">
+            <EditCategory
+              categoryData={selectedCategory}
+              onClose={() => setSelectedCategory(null)}
+              onUpdate={handleUpdate}
+            />
+          </div>
+        </div>
+      )}
+
+      {toast.show && (
+        <div className="fixed bottom-6 right-6 z-[100] flex items-center gap-2.5 bg-slate-900 border border-slate-800 px-4 py-2.5 rounded-full shadow-lg transition-all duration-300 ease-out animate-in fade-in slide-in-from-bottom-4">
+          <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
+            <svg
+              className="w-3 h-3 text-emerald-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={3}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </div>
+
+          <span className="text-[13.5px] font-medium text-slate-100 tracking-wide pr-1">
+            {toast.message}
+          </span>
+        </div>
+      )}
     </div>
   );
 }

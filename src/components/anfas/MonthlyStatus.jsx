@@ -17,24 +17,53 @@ export default function MonthlyStatus({
   const t = VARIANTS[variant] || VARIANTS.green;
 
   return (
-    <div style={{
-      backgroundColor: t.bg,
-      border: `1.5px solid ${t.border}`,
-      borderRadius: "10px",
-      width:"220px",
-      
-      padding: "16px 18px",
-      fontFamily: "'Segoe UI', sans-serif",
-      boxSizing: "border-box",
-      display: "inline-block",
-      minWidth: "180px",
-    }}>
-      <p style={{ margin: "0 0 8px 0", fontSize: "12px", fontWeight: "600", color: t.labelColor }}>
-        {label}
-      </p>
-      <p style={{ margin: 0, fontSize: "22px", fontWeight: "700", color: t.valueColor, lineHeight: 1.1 }}>
-        ₹{typeof value === "number" ? value.toFixed(2) : value}
-      </p>
-    </div>
+    <>
+      <style>{`
+        .ms-card {
+          background-color: var(--ms-bg);
+          border: 1.5px solid var(--ms-border);
+          border-radius: 10px;
+          padding: 16px 18px;
+          font-family: 'Segoe UI', sans-serif;
+          box-sizing: border-box;
+          display: inline-block;
+          width: 220px;
+          min-width: 160px;
+        }
+        .ms-label {
+          margin: 0 0 8px 0;
+          font-size: 12px;
+          font-weight: 600;
+        }
+        .ms-value {
+          margin: 0;
+          font-size: 22px;
+          font-weight: 700;
+          line-height: 1.1;
+        }
+        @media (max-width: 768px) {
+          .ms-card { width: 180px; min-width: 140px; padding: 13px 14px; }
+          .ms-value { font-size: 19px; }
+        }
+        @media (max-width: 480px) {
+          .ms-card { width: 100%; min-width: unset; display: block; }
+          .ms-value { font-size: 18px; }
+          .ms-label { font-size: 11px; }
+        }
+      `}</style>
+
+      <div
+        className="ms-card"
+        style={{
+          backgroundColor: t.bg,
+          border: `1.5px solid ${t.border}`,
+        }}
+      >
+        <p className="ms-label" style={{ color: t.labelColor }}>{label}</p>
+        <p className="ms-value" style={{ color: t.valueColor }}>
+          ₹{typeof value === "number" ? value.toFixed(2) : value}
+        </p>
+      </div>
+    </>
   );
 }

@@ -1,7 +1,3 @@
-// MonthlyCard — Component 67
-// Displays 4 summary cards in a row.
-// Props: totalReceipts, totalBills, finalCash, finalBank
-
 export default function MonthlyCard({
   totalReceipts = 0,
   totalBills    = 0,
@@ -16,29 +12,40 @@ export default function MonthlyCard({
   ];
 
   return (
-    <div style={{
-      display: "grid",
-      gridTemplateColumns: "repeat(4, 1fr)",
-      gap: "12px",
-      width: "100%",
-      fontFamily: "'Segoe UI', sans-serif",
-    }}>
-      {cards.map((c) => (
-        <div key={c.label} style={{
-          backgroundColor: c.bg,
-          border: `1.5px solid ${c.border}`,
-          borderRadius: "10px",
-          padding: "16px 18px",
-          boxSizing: "border-box",
-        }}>
-          <p style={{ margin: "0 0 8px 0", fontSize: "12px", fontWeight: "600", color: c.labelColor }}>
-            {c.label}
-          </p>
-          <p style={{ margin: 0, fontSize: "22px", fontWeight: "700", color: c.valueColor, lineHeight: 1.1 }}>
-            ₹{c.value.toFixed(2)}
-          </p>
-        </div>
-      ))}
-    </div>
+    <>
+      <style>{`
+        .mc-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 12px;
+          width: 100%;
+        }
+        @media (max-width: 1023px) {
+          .mc-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 480px) {
+          .mc-grid { grid-template-columns: 1fr; }
+        }
+      `}</style>
+
+      <div className="mc-grid">
+        {cards.map((c) => (
+          <div key={c.label} style={{
+            backgroundColor: c.bg,
+            border: `1.5px solid ${c.border}`,
+            borderRadius: "10px",
+            padding: "16px 18px",
+            boxSizing: "border-box",
+          }}>
+            <p style={{ margin: "0 0 8px 0", fontSize: "12px", fontWeight: 600, color: c.labelColor, fontFamily: "'Segoe UI', sans-serif" }}>
+              {c.label}
+            </p>
+            <p style={{ margin: 0, fontSize: "22px", fontWeight: 700, lineHeight: 1.1, color: c.valueColor, fontFamily: "'Segoe UI', sans-serif" }}>
+              ₹{c.value.toFixed(2)}
+            </p>
+          </div>
+        ))}
+      </div>
+    </>
   );
 }

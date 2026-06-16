@@ -6,7 +6,7 @@ const ReportCategory = () => {
   const categories = [
     {
       id: "category-wise",
-      route: "/financial-reports/category-wise",
+      route: "/category-wise-report",
       icon: (
         <svg className="w-7 h-7 text-blue-500" viewBox="0 0 24 24" fill="none">
           <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"
@@ -23,7 +23,7 @@ const ReportCategory = () => {
     },
     {
       id: "debit-category-wise",
-      route: "/financial-reports/debit-category-wise",
+      route: "/debit-category-wise-report",
       icon: (
         <svg className="w-7 h-7 text-orange-500" viewBox="0 0 24 24" fill="none">
           <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"
@@ -38,7 +38,7 @@ const ReportCategory = () => {
     },
     {
       id: "dues",
-      route: "/financial-reports/dues",
+      route: "/dues-report",
       icon: (
         <svg className="w-7 h-7 text-green-500" viewBox="0 0 24 24" fill="none">
           <path d="M5 7l2 2 3-3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
@@ -55,7 +55,7 @@ const ReportCategory = () => {
   ];
 
   return (
-   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
       {categories.map((cat) => (
         <div
           key={cat.id}

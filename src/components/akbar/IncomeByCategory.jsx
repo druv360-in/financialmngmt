@@ -1,4 +1,188 @@
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
+
+const specialOfferingsData = [
+  {
+    id: 1,
+    receiptNo: "RCP2001",
+    date: "14/04/2026",
+    title: "Building Fund Donation",
+    payer: "John Smith",
+    paymentMethod: "Cheque",
+    amount: "1000.00",
+  },
+  {
+    id: 2,
+    receiptNo: "RCP2002",
+    date: "15/04/2026",
+    title: "Building Fund Donation",
+    payer: "Mary Thomas",
+    paymentMethod: "UPI",
+    amount: "1500.00",
+  },
+  {
+    id: 3,
+    receiptNo: "RCP2003",
+    date: "16/04/2026",
+    title: "Mission Support",
+    payer: "David Paul",
+    paymentMethod: "Cash",
+    amount: "800.00",
+  },
+  {
+    id: 4,
+    receiptNo: "RCP2004",
+    date: "17/04/2026",
+    title: "Building Fund Donation",
+    payer: "Samuel Roy",
+    paymentMethod: "Bank Transfer",
+    amount: "2000.00",
+  },
+  {
+    id: 5,
+    receiptNo: "RCP2005",
+    date: "18/04/2026",
+    title: "Mission Support",
+    payer: "Annie Joseph",
+    paymentMethod: "UPI",
+    amount: "1200.00",
+  },
+  {
+    id: 6,
+    receiptNo: "RCP2006",
+    date: "19/04/2026",
+    title: "Building Fund Donation",
+    payer: "Thomas George",
+    paymentMethod: "Cash",
+    amount: "1750.00",
+  },
+  {
+    id: 7,
+    receiptNo: "RCP2007",
+    date: "20/04/2026",
+    title: "Mission Support",
+    payer: "Sarah Mathew",
+    paymentMethod: "Cheque",
+    amount: "950.00",
+  },
+  {
+    id: 8,
+    receiptNo: "RCP2008",
+    date: "21/04/2026",
+    title: "Building Fund Donation",
+    payer: "Joseph Mathew",
+    paymentMethod: "UPI",
+    amount: "2200.00",
+  },
+  {
+    id: 9,
+    receiptNo: "RCP2009",
+    date: "22/04/2026",
+    title: "Mission Support",
+    payer: "Kevin Roy",
+    paymentMethod: "Cash",
+    amount: "1350.00",
+  },
+  {
+    id: 10,
+    receiptNo: "RCP2010",
+    date: "23/04/2026",
+    title: "Building Fund Donation",
+    payer: "Peter Jacob",
+    paymentMethod: "Bank Transfer",
+    amount: "1800.00",
+  },
+  {
+    id: 11,
+    receiptNo: "RCP2011",
+    date: "24/04/2026",
+    title: "Mission Support",
+    payer: "Alan Thomas",
+    paymentMethod: "UPI",
+    amount: "900.00",
+  },
+  {
+    id: 12,
+    receiptNo: "RCP2012",
+    date: "25/04/2026",
+    title: "Building Fund Donation",
+    payer: "George Mathew",
+    paymentMethod: "Cheque",
+    amount: "2500.00",
+  },
+];
+
+const specialOfferingsTotal = specialOfferingsData.reduce(
+  (sum, item) => sum + Number(item.amount),
+  0
+);
+
+const handleDownloadIncome = () => {
+  const doc = new jsPDF();
+
+  doc.text("Special Offerings Report", 14, 15);
+
+  autoTable(doc, {
+  startY: 25,
+
+  head: [[
+    "SL",
+    "Receipt No",
+    "Date",
+    "Title",
+    "Payer",
+    "Payment Method",
+    "Amount",
+  ]],
+
+  body: specialOfferingsData.map((item) => [
+    item.id,
+    item.receiptNo,
+    item.date,
+    item.title,
+    item.payer,
+    item.paymentMethod,
+    "Rs. " + item.amount,
+  ]),
+
+  theme: "grid",
+
+  styles: {
+    fontSize: 8,
+    cellPadding: 3,
+    lineColor: [220, 220, 220],
+    lineWidth: 0.1,
+  },
+
+  headStyles: {
+    fillColor: [249, 250, 251],
+    textColor: [0, 0, 0],
+    fontStyle: "bold",
+  },
+
+  columnStyles: {
+    6: {
+      halign: "right",
+      textColor: [22, 163, 74],
+    },
+  },
+});
+const finalY = doc.lastAutoTable.finalY;
+
+doc.text(
+  `Category Total: Rs. ${specialOfferingsTotal}`,
+  14,
+  finalY + 12
+);
+
+  doc.save("SpecialOfferingsReport.pdf");
+};
+
+
 export default function IncomeByCategory() {
+
+
   return (
     <div className="border border-gray-200 rounded-md p-4 mb-4">
 
@@ -7,16 +191,20 @@ export default function IncomeByCategory() {
           Special Offerings
         </h3>
 
-        <button className="bg-black text-white px-3 py-1 rounded text-xs">
+        <button
+        onClick={handleDownloadIncome}
+        className="bg-black text-white px-3 py-1 rounded text-xs"
+        >
           Download PDF
         </button>
       </div>
 
       <div className="text-right text-xs text-gray-500 mb-2">
-        1 receipt • ₹1000.00
+        {specialOfferingsData.length} receipts • ₹{specialOfferingsTotal.toLocaleString()}
       </div>
 
-      <table className="w-full border border-gray-200 text-xs">
+      <div className="overflow-auto max-h-[373px]">
+       <table className="min-w-[850px] w-full border border-gray-200 text-xs whitespace-nowrap">
         <thead>
           <tr className="bg-gray-50">
             <th className="border border-gray-200 px-2 py-2 text-center">
@@ -50,45 +238,47 @@ export default function IncomeByCategory() {
         </thead>
 
         <tbody>
-          <tr>
-            <td className="border border-gray-200 px-2 py-2">
-              1
-            </td>
+  {specialOfferingsData.map((item) => (
+    <tr key={item.id}>
+      <td className="border border-gray-200 px-2 py-2">
+        {item.id}
+      </td>
 
-            <td className="border border-gray-200 px-2 py-2 text-blue-600">
-              RCP1001
-            </td>
+      <td className="border border-gray-200 px-2 py-2 text-blue-600">
+        {item.receiptNo}
+      </td>
 
-            <td className="border border-gray-200 px-2 py-2">
-              14/4/2026
-            </td>
+      <td className="border border-gray-200 px-2 py-2">
+        {item.date}
+      </td>
 
-            <td className="border border-gray-200 px-2 py-2">
-              Building Fund Donation
-            </td>
+      <td className="border border-gray-200 px-2 py-2">
+        {item.title}
+      </td>
 
-            <td className="border border-gray-200 px-2 py-2">
-              John Smith
-            </td>
+      <td className="border border-gray-200 px-2 py-2">
+        {item.payer}
+      </td>
 
-            <td className="border border-gray-200 px-2 py-2">
-              Check
-            </td>
+      <td className="border border-gray-200 px-2 py-2">
+        {item.paymentMethod}
+      </td>
 
-            <td className="border border-gray-200 px-2 py-2 text-right text-green-600">
-              ₹1000.00
-            </td>
-          </tr>
-        </tbody>
+      <td className="border border-gray-200 px-2 py-2 text-right text-green-600">
+        ₹{item.amount}
+      </td>
+    </tr>
+  ))}
+</tbody>
       </table>
-
+      </div>
       <div className="bg-green-50 px-4 py-3 text-right">
         <div className="text-green-600 text-xs font-medium">
           Category Total
         </div>
 
         <div className="text-green-700 font-bold text-lg">
-          ₹1000.00
+          ₹{specialOfferingsTotal.toLocaleString()}
         </div>
       </div>
 
