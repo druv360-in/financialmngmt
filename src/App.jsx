@@ -1,13 +1,13 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route } from "react-router-dom";
 import './App.css'
 
-
+// Pages
+import CashBankPage from "./pages/CashBankPage";
 // sreekaanth
 import CategoryWiseReportPage from './pages/CategoryWiseReportPage'
 import DebitCategoryWiseReportPage from './pages/DebitCategoryWiseReportPage'
 import DuesReportPage from './pages/DuesReportPage'
 import FinancialReportsPage from './pages/FinancialReportsPage'
-import { Routes, Route } from "react-router-dom";
 import FamiliesPage from "./Pages/FamiliesPage";
 import './App.css';
 
@@ -24,6 +24,10 @@ function App() {
   return (
     <Routes>
 
+      
+      <Route path="/cashbankPage" element={<CashBankPage />} />
+     
+      
 
       {/* sreekaanth */}
       <Route path="/financial-reports"          element={<FinancialReportsPage />} />
