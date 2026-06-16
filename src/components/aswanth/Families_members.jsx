@@ -1,23 +1,44 @@
-
+import React, { useState } from "react";
 import styled from "styled-components";
 import Family_stats from "./Family_stats";
-import { useState } from "react";
+import { FiUsers } from "react-icons/fi";
 import Add_editfamily from "./Add_editfamily";
+import { LuUser } from "react-icons/lu";
+import { FaPlus } from "react-icons/fa";
 
-const HeadingCon = styled.div`
-  position: absolute;
-  top: 35px;
-  left: 375px;
+// --- STYLED COMPONENTS (No Absolute/Relative Offsets) ---
+
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+`;
+
+const HeaderRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
 
   @media (max-width: 768px) {
-    left: 20px;
-    top: 20px;
+    flex-direction: column;
+    align-items: flex-start;
   }
 `;
 
+const HeadingCon = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
 const Heading = styled.h2`
+  margin: 0;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 22px;
+  color: rgb(17, 24, 39);
 
   @media (max-width: 768px) {
     font-size: 18px;
@@ -25,159 +46,112 @@ const Heading = styled.h2`
 `;
 
 const SubHeading = styled.p`
+  margin: 0;
   font-weight: 400;
-  font-size: 11px;
-  color: rgb(133, 130, 130);
+  font-size: 13px;
+  color: rgb(107, 114, 128);
 
   @media (max-width: 768px) {
-    font-size: 9px;
-  }
-`;
-
-const AddFamilyBtn = styled.div`
-  position: absolute;
-  left: 1245px;
-  top: 50px;
-
-  @media (max-width: 768px) {
-    left: 20px;
-    top: 90px;
-  }
-`;
-
-const PlusIcon = styled.i`
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  font-size: 10px;
-  color: white;
-
-  @media (max-width: 768px) {
-    top: 9px;
-    font-size: 9px;
+    font-size: 11px;
   }
 `;
 
 const Button = styled.button`
-  font-size: 10px;
-  color: white;
-  background-color: black;
-  padding: 5px;
-  padding-left: 30px;
-  padding-right: 10px;
-  border-radius: 7px;
-
-  @media (max-width: 768px) {
-    font-size: 9px;
-    padding-left: 26px;
-    padding-right: 9px;
-  }
-`;
-
-const SearchBarCon = styled.div`
-  position: absolute;
-  top: 200px;
-  left: 380px;
-
-  @media (max-width: 768px) {
-    left: 20px;
-    top: 150px;
-  }
-`;
-
-const SearchIcon = styled.i`
-  color: rgb(208, 208, 208);
-  position: absolute;
-  top: 8px;
-  left: 15px;
+  display: inline-flex;
+  width: 120px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   font-size: 12px;
+  font-weight: 600;
+  color: white;
+  background-color: #000000;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  height: 31px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgb(31, 41, 55);
+  }
 
   @media (max-width: 768px) {
-    font-size: 10px;
-    top: 9px;
+    width: 100%; /* Spans full width on mobile devices for easy tap targets */
+    font-size: 11px;
   }
 `;
 
 const StatsBoxes = styled.div`
-  display: flex;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 
   @media (max-width: 768px) {
-    flex-direction: column;
-    position: relative;
-    top: 170px;
-    left: 20px;
-    gap: 15px;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 12px;
   }
 `;
+
+// --- COMPONENT IMPLEMENTATION ---
+
 function Families_members() {
   const [showModal, setShowModal] = useState(false);
+  const families = JSON.parse(localStorage.getItem("families")) || [];
+
+  const totalFamilies = families.length;
+  const totalMembers = families.reduce(
+    (total, family) => total + (family.members?.length || 0),
+    0
+  );
+
+  const avgMembersPerFamily =
+    totalFamilies > 0 ? (totalMembers / totalFamilies).toFixed(1) : 0;
+
   return (
-    <div>
+    <Container>
+      {/* Dynamic Header & Button Wrapper Block */}
+      <HeaderRow>
+        <HeadingCon>
+          <Heading>Families & members</Heading>
+          <SubHeading>Manage church families and member details</SubHeading>
+        </HeadingCon>
 
-      <HeadingCon>
-        <Heading>Families & members</Heading>
+        <Button onClick={() => setShowModal(true)}>
+          <FaPlus size={10} />
+          Add Family
+        </Button>
+      </HeaderRow>
 
-        <SubHeading>
-          Manage church families and member details
-        </SubHeading>
-      </HeadingCon>
-
-      <AddFamilyBtn>
-  <PlusIcon className="fa-solid fa-plus"></PlusIcon>
-
-  <Button onClick={() => setShowModal(true)}>
-    Add Family
-  </Button>
-
-  {showModal && (
-    <Add_editfamily
-      closeModal={() => setShowModal(false)}
-    />
-  )}
-
-</AddFamilyBtn>
-
-      
-
+      {/* Stats Cards Display Layout */}
       <StatsBoxes>
-
         <Family_stats
-          icon={
-            <i
-              className="fa-regular fa-user"
-              style={{ color: "#2563eb", fontSize: "21px" }}
-            ></i>
-          }
+          icon={<FiUsers style={{ color: "##155DFC", fontSize: "20px" }} />}
           heading="Total Families"
-          value="2"
+          value={totalFamilies}
         />
 
         <Family_stats
-          icon={
-            <i
-              className="fa-regular fa-user"
-              style={{ color: "#16a34a", fontSize: "21px" }}
-            ></i>
-          }
+          icon={<LuUser style={{ color: "#00A63E", fontSize: "20px" }} />}
           heading="Total Members"
-          value="5"
+          value={totalMembers}
         />
 
         <Family_stats
-          icon={
-            <i
-              className="fa-regular fa-user"
-              style={{ color: "#9333ea", fontSize: "21px" }}
-            ></i>
-          }
+          icon={<FiUsers style={{ color: "#9810FA", fontSize: "20px" }} />}
           heading="Avg Members/Family"
-          value="2.5"
+          value={avgMembersPerFamily}
         />
-
       </StatsBoxes>
 
-    </div>
+      {showModal && <Add_editfamily closeModal={() => setShowModal(false)} />}
+    </Container>
   );
 }
 

@@ -4,35 +4,25 @@ import Sidemenu from "../components/binoj/Sidemenu";
 
 function Families() {
   return (
-    <>
-      {/* MOBILE & TABLET VIEW */}
-      <div className="block lg:hidden p-3 mt-1">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-white">
+      {/* SIDEBAR: Hidden on mobile/tablet unless managed by a menu toggle; fits nicely in flex on desktop */}
+      <div className="w-full lg:w-64 lg:shrink-0">
         <Sidemenu />
+      </div>
 
-        <div className="relative ">
-  <Families_members />
-</div>
+      {/* MAIN CONTENT AREA */}
+      <div className="flex-1 flex flex-col p-4 sm:p-6 lg:p-8 gap-6 min-w-0">
+        {/* Top Segment: Family Members overview */}
+        <div className="w-full">
+          <Families_members />
+        </div>
 
-        <div className="mt-40 overflow-x-auto">
+        {/* Bottom Segment: Responsive Ledger Table */}
+        <div className="w-full">
           <Ledger_format_table />
         </div>
       </div>
-
-      {/* LAPTOP & DESKTOP VIEW */}
-      <div className="hidden lg:flex min-h-screen">
-        <div className="w-64 shrink-0">
-          <Sidemenu />
-        </div> 
-
-        <div className="absolute z-100 ">
-          <Families_members />
-        </div>
-          <div className="absolute right-37 mt-40 w-256.25">
-            <Ledger_format_table />
-          </div>
-        
-      </div>
-    </>
+    </div>
   );
 }
 
