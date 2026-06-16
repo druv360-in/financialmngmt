@@ -34,13 +34,13 @@ export default function WithdrawCash({ availableBalance = 6379.5, onWithdraw, on
     }
   };
 
-  const handleCancel = () => {
-    if (onCancel) {
-      onCancel();
-    } else {
-      navigate(-1);
-    }
-  };
+    const handleCancel = () => {
+      if (onCancel) {
+        onCancel();
+      } else {
+        navigate(-1);
+      }
+    };
 
   return (
     <div style={styles.overlay}>
@@ -306,3 +306,4 @@ const styles = {
     transition: "background 0.2s",
     whiteSpace: "nowrap",            // Prevents the word "Cancel" from wrapping to a new line
   }}
+  
