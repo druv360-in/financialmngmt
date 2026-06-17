@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Icon from "./Icon";
 
@@ -15,19 +16,41 @@ export const NAV_ITEMS = [
   { label: "Settings", icon: "settings", path: "/settings" },
 ];
 
-export default function Sidemenu({ isOpen, onClose }) {
+function getActiveLabel(pathname) {
+  const activeItem = NAV_ITEMS.find((item) => item.path === pathname);
+  return activeItem?.label || "Dashboard";
+}
+
+export default function Sidemenu() {
+  const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
+  const active = getActiveLabel(location.pathname);
+
   function handleNavigate(path) {
     navigate(path);
-    onClose?.();
+    setIsOpen(false);
   }
 
   return (
     <>
+      <header className="lg:hidden sticky top-0 z-10 bg-white border-b border-gray-100 flex items-center gap-3 px-4 py-3 shadow-sm">
+        <button
+          onClick={() => setIsOpen(true)}
+          className="w-9 h-9 rounded-lg flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
+          aria-label="Open menu"
+        >
+          <Icon name="menu" size={28} />
+        </button>
+
+        <span className="font-semibold text-gray-800 text-sm">
+          {active}
+        </span>
+      </header>
+
       <div
-        onClick={onClose}
+        onClick={() => setIsOpen(false)}
         className={`fixed inset-0 z-10 bg-black/20 backdrop-blur-sm transition-opacity duration-300 lg:hidden
           ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
       />
