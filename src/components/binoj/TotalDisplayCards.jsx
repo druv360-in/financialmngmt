@@ -41,12 +41,12 @@ function TotalDisplayCard({
 }
 
 export default function TotalDisplayCards({
-  totalCredit = "₹0.00",
-  totalDebit = "₹0.00",
-  netBalance = "₹0.00",
-  pendingBills = 0,
-  receiptCount = 0,
-  paidBillCount = 0,
+  totalCredit = "₹10000.00",
+  totalDebit = "₹5000.00",
+  netBalance = "₹5000.00",
+  pendingBills = 9,
+  receiptCount = 5,
+  paidBillCount = 10,
   balanceLabel = "Surplus",
 }) {
   const cards = [

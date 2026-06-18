@@ -57,8 +57,8 @@ const CreditsDebits = ({ filters }) => {
               );
             })}
 
-            {/* ── Totals row — white background ── */}
-           <tr className="border-b border-gray-200 bg-gray-100 w-full">
+            {/* ── Totals row ── */}
+            <tr className="border-b border-gray-200 bg-gray-100 w-full">
               <td colSpan={2} className="py-3 pr-4 text-right text-[13px] font-bold text-gray-800">
                 Total Credits:
               </td>
@@ -73,7 +73,7 @@ const CreditsDebits = ({ filters }) => {
               </td>
             </tr>
 
-            {/* ── Current Cash / Bank row — white background ── */}
+            {/* ── Current Cash / Bank row ── */}
             <tr className="bg-green-50">
               <td colSpan={2} className="py-2.5 pr-4 text-right text-[13px] font-bold text-green-700">
                 Current Cash in Hand:
@@ -89,7 +89,7 @@ const CreditsDebits = ({ filters }) => {
               </td>
             </tr>
 
-            {/* ── Books Balanced row — light green background ── */}
+            {/* ── Books Balanced row ── */}
             <tr className="bg-green-100">
               <td colSpan={5} className="py-3 pr-4 text-right text-[13px] font-bold text-gray-800">
                 ✓ Books Balanced
