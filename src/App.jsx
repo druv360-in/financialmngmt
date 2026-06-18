@@ -7,6 +7,7 @@ import CreateBulkDue from "./components/fathima/CreateBulkDue";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import './App.css'
+import JournalPage from "./pages/JournalPage";
 
 import DashboardPage from "./pages/DashboardPage";
 import DuesReportPage from  "./pages/DuesReportPage";
@@ -30,6 +31,8 @@ import UnpaidDuesPage from "./pages/UnpaidDuesPage";
 function App() {
   return (
     <Routes>
+      <Route path="/ledger"    element={<JournalPage />} />
+      
       <Route path="/" element={<BulkDues />} />
         <Route path="/bulk-dues" element={<BulkDues />} />
        <Route path="/create-bulk-due" element={<CreateBulkDue />} />
