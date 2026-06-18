@@ -7,6 +7,8 @@ import {
 function FamilyDuesStatus({
   openPaymentModal,
 }) {
+  
+
   return (
     <div className="mt-6 w-full">
 
@@ -24,7 +26,7 @@ function FamilyDuesStatus({
           <input
             type="text"
             placeholder="Search families..."
-            className="h-[46px] w-full rounded-2xl border border-gray-200 bg-[#f8f8f9] pl-11 pr-4 text-sm outline-none"
+            className="h-[40px] w-full rounded-2xl border border-gray-200 bg-[#ececec] pl-11 pr-4 text-sm outline-none"
           />
 
         </div>
@@ -47,14 +49,12 @@ function FamilyDuesStatus({
 
             {/* TABLE */}
 
-            <div className="overflow-x-auto">
+<div className="max-h-[250px] overflow-y-auto overflow-x-auto">
 
               <table className="min-w-full w-full border-collapse">
 
-                <thead>
-
-                  <tr className="border-b border-gray-100 bg-gray-50">
-
+<thead className="sticky top-0 z-10 bg-gray-50">
+<tr className="border-b border-gray-100 bg-gray-50">
                     <th className="px-4 py-4 text-left text-sm font-semibold text-gray-700">
                       SL No
                     </th>
@@ -99,7 +99,7 @@ function FamilyDuesStatus({
 
                   {/* ROW 1 */}
 
-                  <tr className="border-b border-[#f3dede] bg-[#fff6f6]">
+<tr className="border-b border-[#f3dede] bg-[#fff6f6] hover:bg-gray-50 transition-colors duration-200 cursor-pointer">
 
                     <td className="px-4 py-4 text-sm font-medium">
                       1
@@ -146,8 +146,9 @@ function FamilyDuesStatus({
                     </td>
 
                     <td className="px-4 py-4">
+                  <div className="flex items-center gap-2">
 
-                      <button
+                    <button
                         onClick={openPaymentModal}
                         className="inline-flex items-center justify-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-xs font-semibold text-white hover:bg-green-700"
                       >
@@ -159,6 +160,10 @@ function FamilyDuesStatus({
                         </span>
 
                       </button>
+                   
+                  </div>
+                      
+
 
                     </td>
 
@@ -166,9 +171,8 @@ function FamilyDuesStatus({
 
                   {/* ROW 2 */}
 
-                  <tr className="bg-[#fff6f6]">
-
-                    <td className="px-4 py-4 text-sm font-medium">
+<tr className="bg-[#fff6f6] hover:bg-gray-50 transition-colors duration-200 cursor-pointer">
+                      <td className="px-4 py-4 text-sm font-medium">
                       2
                     </td>
 
@@ -212,21 +216,79 @@ function FamilyDuesStatus({
                       ₹650.00
                     </td>
 
+                   <td className="px-4 py-4">
+
+  <div className="flex items-center gap-2">
+
+    <button
+      onClick={openPaymentModal}
+      className="inline-flex items-center justify-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-xs font-semibold text-white hover:bg-green-700"
+    >
+      <FiDollarSign size={14} />
+      <span>Pay</span>
+    </button>
+
+   
+
+  </div>
+
+</td>
+
+</tr>
+                  {/* ROW 3 */}
+<tr className="border-t border-[#f3dede] bg-[#fff6f6] hover:bg-gray-50 transition-colors duration-200 cursor-pointer">
+                    <td className="px-4 py-4 text-sm font-medium">
+                      3
+                    </td>
+
+                    <td className="px-4 py-4 text-sm font-semibold">
+                      Williams Family
+                    </td>
+
+                    <td className="px-4 py-4 text-sm">
+                      Michael Williams
+                    </td>
+
+                    <td className="px-4 py-4 text-sm">
+                      <p className="font-semibold">
+                        ₹300.00
+                      </p>
+
+                      <p className="text-sm text-gray-500">
+                        Paid: ₹100.00
+                      </p>
+                    </td>
+
                     <td className="px-4 py-4">
+                      <span className="rounded-md bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-700">
+                        Partial
+                      </span>
+                    </td>
 
-                      <button
-                        onClick={openPaymentModal}
-                        className="inline-flex items-center justify-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-xs font-semibold text-white hover:bg-green-700"
-                      >
+                    <td className="px-4 py-4 text-sm whitespace-nowrap text-gray-500">
+                      Building Fund
+                    </td>
 
-                        <FiDollarSign size={14} />
+                    <td className="px-4 py-4 text-sm font-semibold text-green-600">
+                      ₹1200.00
+                    </td>
 
-                        <span>
-                          Pay
-                        </span>
+                    <td className="px-4 py-4 text-sm font-semibold text-red-600">
+                      ₹200.00
+                    </td>
 
-                      </button>
+                    <td className="px-4 py-4">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={openPaymentModal}
+                          className="inline-flex items-center justify-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-xs font-semibold text-white hover:bg-green-700"
+                        >
+                          <FiDollarSign size={14} />
+                          <span>Pay</span>
+                        </button>
 
+                
+                      </div>
                     </td>
 
                   </tr>
@@ -265,7 +327,10 @@ function FamilyDuesStatus({
 
         </div>
 
+  
+
       </div>
+     
 
     </div>
   );

@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import "./App.css";
 import './App.css'
 
 import DashboardPage from "./pages/DashboardPage";
@@ -18,10 +19,12 @@ import Families from "./pages/Families";
 
 
 
+import UnpaidDuesPage from "./pages/UnpaidDuesPage";
 
 function App() {
   return (
     <Routes>
+      <Route path="/UnpaidDues" element={<UnpaidDuesPage />} />
       <Route path="/families" element={<Families />} />
       
       <Route path="/Dashboard" element={<DashboardPage />}/>
@@ -50,6 +53,5 @@ function App() {
     </Routes>
   );
 }
-
 
 export default App;
