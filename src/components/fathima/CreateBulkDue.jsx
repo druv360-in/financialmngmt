@@ -1,5 +1,7 @@
 import { useState } from "react"
 import { Users } from "lucide-react"
+import { useNavigate } from "react-router-dom";
+
 
 function CreateBulkDue() {
 
@@ -12,6 +14,8 @@ function CreateBulkDue() {
   const [searchFamily, setSearchFamily] = useState("")
 
   const [submitted, setSubmitted] = useState(false)
+
+  const navigate = useNavigate();
 
   const familyList = [
     { id: 1, family: "Smith Family", name: "John Smith" },
@@ -67,19 +71,20 @@ function CreateBulkDue() {
       return
     }
     alert("Bulk Due Created Successfully!")
+     navigate("/bulk-dues");
   }
 
   const handleCancel = () => {
-    alert("Creation Cancelled!")
+     navigate("/bulk-dues");
   }
 
   const handleClose = () => {
-    alert("Modal Closed!")
+     navigate("/bulk-dues");
   }
 
   return (
 
-    <div className="min-h-screen bg-gray-200 flex items-center justify-center p-4">
+    <div >
 
       {/* Modal */}
       <div
@@ -88,26 +93,10 @@ function CreateBulkDue() {
           w-full
           max-w-[550px]
           rounded-2xl
-          shadow-xl
           p-5
           relative
         "
       >
-
-        {/* Close Button */}
-        <button
-          onClick={handleClose}
-          className="
-            absolute
-            top-4
-            right-4
-            text-xl
-            text-gray-400
-            hover:text-black
-          "
-        >
-          ×
-        </button>
 
         {/* Heading */}
         <h1 className="text-[16px] font-bold mb-5">

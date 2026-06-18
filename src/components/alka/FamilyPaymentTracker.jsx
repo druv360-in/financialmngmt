@@ -3,12 +3,13 @@ import { FaPlus } from "react-icons/fa";
 
 import PaidDueStats from "./PaidDueStats";
 import PaidDueCard from "./PaidDueCard";
-import AddEditNewDue from "./AddEditNewDue";
+
+// Fathima Component
+import AddEditPayment from "../fathima/AddEditPayment";
 
 const FamilyPaymentTracker = () => {
-
-  // Modal State
-  const [isOpen, setIsOpen] = useState(false);
+  // Payment Popup State
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
 
   // Edit State
   const [editDue, setEditDue] = useState(null);
@@ -17,15 +18,13 @@ const FamilyPaymentTracker = () => {
   // Filter Year
   const [selectedYear, setSelectedYear] = useState("2026");
 
-  // Due List State
-//const [dues, setDues] = useState([]);
+  // Payment List
   const [dues, setDues] = useState([
     {
       title: "Annual Fund",
       amount: 1000,
       dueDate: "2026-07-21",
     },
-
     {
       title: "Xmas",
       amount: 200,
@@ -33,14 +32,10 @@ const FamilyPaymentTracker = () => {
     },
   ]);
 
-
-
-  // Add / Update Due
+  // Add / Update Payment
   const addDue = (newDue) => {
-
-    // Update Existing Due
+    // Update Existing
     if (editIndex !== null) {
-
       const updatedDues = [...dues];
 
       updatedDues[editIndex] = newDue;
@@ -48,127 +43,141 @@ const FamilyPaymentTracker = () => {
       setDues(updatedDues);
 
       setEditIndex(null);
-
       setEditDue(null);
-
     }
 
-    // Add New Due
+    // Add New
     else {
-
       setDues([...dues, newDue]);
-
     }
-
   };
 
-
-
-  // Edit Due
+  // Edit Payment
   const handleEdit = (due, index) => {
-
     setEditDue(due);
-
     setEditIndex(index);
-
-    setIsOpen(true);
-
+    setIsPaymentOpen(true);
   };
 
-  // Delete Due
+  // Delete Payment
   const handleDelete = (index) => {
     const updatedDues = dues.filter(
       (_, i) => i !== index
     );
+
     setDues(updatedDues);
   };
 
-
-
-  // Filter By Year
+  // Filter Year
   const filteredDues = dues.filter((due) => {
-
     return (
       new Date(due.dueDate)
         .getFullYear()
         .toString() === selectedYear
     );
-
   });
 
-
-
   return (
-    <div className="w-full max-w-4xl bg-white border border-gray-300 rounded-xl shadow-sm p-4">
-
+    <div className="w-full bg-white border border-gray-300 rounded-xl shadow-sm p-5">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="mb-4">
 
-        <h1 className="text-lg font-semibold text-gray-800">
-          Payment Tracker - Accounting Year
-        </h1>
+        {/* Desktop */}
+        <div className="hidden md:flex items-center justify-between">
+          <h1 className="text-lg font-semibold text-gray-800">
+            Payment Tracker - Accounting Year
+          </h1>
 
-        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3">
+            <select
+              value={selectedYear}
+              onChange={(e) =>
+                setSelectedYear(e.target.value)
+              }
+              className="border rounded-lg px-2 py-2 text-sm outline-none"
+            >
+              <option>2026</option>
+              <option>2025</option>
+              <option>2024</option>
+            </select>
 
-          {/* Year Dropdown */}
-          <select
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
-            className="
-              border
-              rounded-lg
-              px-2
-              py-2
-              text-sm
-              outline-none
-            "
-          >
+            <button
+              onClick={() => {
+                setEditDue(null);
+                setEditIndex(null);
+                setIsPaymentOpen(true);
+              }}
+              className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-800 transition"
+            >
+              <FaPlus size={12} />
+              Add Payment
+            </button>
+          </div>
+        </div>
 
-            <option>2026</option>
-            <option>2025</option>
-            <option>2024</option>
+        {/* Mobile */}
+        <div className="md:hidden">
+          <h1 className="text-lg font-semibold text-gray-800">
+            Payment Tracker - Accounting Year
+          </h1>
 
-          </select>
-
-          {/* Add Payment Button */}
           <button
+            onClick={() => {
+              setEditDue(null);
+              setEditIndex(null);
+              setIsPaymentOpen(true);
+            }}
             className="
-              flex
-              items-center
-              gap-2
+              mt-4
+              w-full
               bg-black
               text-white
-              px-4
-              py-2
-              rounded-lg
+              py-3
+              rounded-xl
               text-sm
+              font-medium
+              shadow-md
               hover:bg-gray-800
               transition
             "
           >
-
-            <FaPlus size={12} />
-
-            Add Payment
-
+            + Add Payment
           </button>
 
+          <select
+            value={selectedYear}
+            onChange={(e) =>
+              setSelectedYear(e.target.value)
+            }
+            className="
+              mt-3
+              w-full
+              border
+              border-gray-300
+              rounded-xl
+              px-4
+              py-3
+              text-sm
+              outline-none
+              bg-white
+            "
+          >
+            <option>2026</option>
+            <option>2025</option>
+            <option>2024</option>
+          </select>
         </div>
 
       </div>
 
-      {/* Component 44 */}
+      {/* Stats */}
       <div className="mb-4">
-
         <PaidDueStats dues={filteredDues} />
-
       </div>
 
-      {/* Component 45 */}
+      {/* Payment Cards */}
       <div className="space-y-4">
-
         {filteredDues.map((due, index) => (
-
           <PaidDueCard
             key={index}
             title={due.title}
@@ -177,20 +186,16 @@ const FamilyPaymentTracker = () => {
             onEdit={() => handleEdit(due, index)}
             onDelete={() => handleDelete(index)}
           />
-
         ))}
-
       </div>
 
-      {/* Component 46 */}
-      <AddEditNewDue
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        addDue={addDue}
-        editDue={editDue}
+      {/* Add / Edit Payment Popup */}
+      <AddEditPayment
+        isOpen={isPaymentOpen}
+        setIsOpen={setIsPaymentOpen}
+        editPayment={editDue}
+        addPayment={addDue}
       />
-      
-
     </div>
   );
 };

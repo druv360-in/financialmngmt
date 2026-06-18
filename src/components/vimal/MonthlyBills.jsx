@@ -10,6 +10,8 @@ import BillCard from "../vimal/BillCard";
 export default function MonthlyBills({
   month,
   bills,
+  onEditBill,
+  onDeleteBill,
 }) {
 
   const [isOpen, setIsOpen] = useState(true);
@@ -94,6 +96,12 @@ export default function MonthlyBills({
               dueDate={bill.dueDate}
               description={bill.description}
               amount={bill.amount}
+              onEdit={() => onEditBill(bill)}
+              onDelete={() =>
+                onDeleteBill(
+                  bill.recordNumber
+                )
+              }
             />
 
           ))}

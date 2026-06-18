@@ -1,81 +1,59 @@
+import React from "react";
 import styled from "styled-components";
 
 const Card = styled.div`
-  position: relative;
-  top: 100px;
-  left: 376px;
-  width: 316px;
-  height: 79px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%; 
+  height: 76px;
+  background-color: #ffffff;
+  border: 1px solid rgb(229, 231, 235);
   border-radius: 10px;
-  border: 1px solid rgb(230, 229, 229);
-
-  /* MOBILE */
- 
-  @media (max-width: 768px) { 
-    left: 0px;
-    top: 0px;
-    width: 90%;
-    height: 75px;
-  }
+  padding: 0 16px;
+  margin-top: 0px;
+  box-sizing: border-box;
 `;
 
 const IconCon = styled.div`
-  position: absolute;
-  top: 20px;
-  left: 19px;
-  font-weight: 700;
-  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: rgb(243, 244, 246);
+  flex-shrink: 0;
+`;
 
-  /* MOBILE */
-
-  @media (max-width: 768px) {
-    top: 18px;
-    left: 16px;
-    font-size: 18px;
-  }
+const TextCon = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 `;
 
 const Heading = styled.h2`
-  position: relative;
-  top: 20px;
-  left: 50px;
-  font-size: 10px;
-  font-weight: 400;
-  color: rgb(84, 83, 83);
-
-  /* MOBILE */
-
-  @media (max-width: 768px) {
-    top: 18px;
-    left: 45px;
-    font-size: 9px;
-  }
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgb(107, 114, 128);
 `;
 
 const Value = styled.p`
-  position: relative;
-  top: 15px;
-  left: 49px;
+  margin: 0;
   font-weight: 700;
-  font-size: 18px;
-
-  /* MOBILE */
-
-  @media (max-width: 768px) {
-    top: 14px;
-    left: 45px;
-    font-size: 16px;
-  }
+  font-size: 20px;
+  color: rgb(17, 24, 39);
 `;
 
 function Family_stats({ heading, value, icon }) {
   return (
     <Card>
       <IconCon>{icon}</IconCon>
-
-      <Heading>{heading}</Heading>
-
-      <Value>{value}</Value>
+      <TextCon>
+        <Heading>{heading}</Heading>
+        <Value>{value}</Value>
+      </TextCon>
     </Card>
   );
 }
