@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function DepositCash({ availableCash }) {
+function DepositCash({ availableCash ,onCancel}) {
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");
   const [depositedBy, setDepositedBy] = useState("");
@@ -21,12 +21,15 @@ function DepositCash({ availableCash }) {
     }
   };
 
-  const handleCancel = () => {
-    alert("Deposit Cancelled");
-  };
+ const handleCancel = () => {
+  if (onCancel) {
+    onCancel(); // closes popup from parent
+  }
+};
 
   return (
-    <>
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    
       <style>
         {`
           input[type="number"] {
@@ -40,12 +43,15 @@ function DepositCash({ availableCash }) {
             cursor: pointer;
             filter: invert(1);
           }
+            
         `}
       </style>
-
+      
       <div className="w-full max-w-[620px] bg-[#f7f7f7] rounded-sm shadow-md p-6 relative border border-gray-100">
         {/* Close Button */}
-        <button className="absolute top-3 right-4 text-[22px] text-gray-600 font-light">
+        <button className="absolute top-3 right-4 text-[22px] text-gray-600 font-light"
+        onClick={handleCancel}
+      >
           ×
         </button>
 
@@ -142,11 +148,12 @@ function DepositCash({ availableCash }) {
             onClick={handleCancel}
             className="px-7 h-[44px] border border-gray-300 bg-[#f7f7f7] rounded-[10px] text-[16px] font-medium hover:bg-gray-100"
           >
+            
             Cancel
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

@@ -1,9 +1,10 @@
-import BillsStatusCard from "../vimal/BillsStatusCard";
+import BillsStatusCard from "./BillsStatusCard";
 
 export default function BillsStatus({
   totalBills,
   pendingBills,
   paidBills,
+  overdueBills,
   totalAmount,
 }) {
 
@@ -27,6 +28,12 @@ export default function BillsStatus({
     },
 
     {
+      title: "Overdue",
+      value: overdueBills,
+      color: "text-[#DC2626]",
+    },
+
+    {
       title: "Total Amount",
       value: totalAmount,
       color: "text-[#111827]",
@@ -34,7 +41,7 @@ export default function BillsStatus({
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
 
       {stats.map((stat) => (
         <BillsStatusCard
