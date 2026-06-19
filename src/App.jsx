@@ -1,23 +1,23 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import './App.css'
-import JournalPage from "./pages1/JournalPage";
+import JournalPage from "./pages_1/JournalPage";
 
-import DashboardPage from "./pages1/DashboardPage";
-import DuesReportPage from  "./pages1/DuesReportPage";
-import BillsManagementPage from "./pages1/BillsManagementPage";
-import Page5 from "./pages1/Page5";
-import CategoryPage from "./pages1/categoryPage";
+import DashboardPage from "./pages_1/DashboardPage";
+import DuesReportPage from  "./pages_1/DuesReportPage";
+import BillsManagementPage from "./pages_1/BillsManagementPage";
+import Page5 from "./pages_1/Page5";
+import CategoryPage from "./pages_1/categoryPage";
 
 
-import categoryReportPage from "./pages1/CategoryReportPage";
-import CashBankPage from "./pages1/CashBankPage";
+import categoryReportPage from "./pages_1/CategoryReportPage";
+import CashBankPage from "./pages_1/CashBankPage";
 
-import CategoryWiseReportPage from './pages1/CategoryWiseReportPage'
-import DebitCategoryWiseReportPage from './pages1/DebitCategoryWiseReportPage'
-import FinancialReportsPage from './pages1/FinancialReportsPage'
-import FamiliesPage from "./pages1/FamiliesPage";
-import Families from "./pages1/Families";
-import SettingsPage from "./pages1/SettingsPage";
+import CategoryWiseReportPage from './pages_1/CategoryWiseReportPage'
+import DebitCategoryWiseReportPage from './pages_1/DebitCategoryWiseReportPage'
+import FinancialReportsPage from './pages_1/FinancialReportsPage'
+import FamiliesPage from "./pages_1/FamiliesPage";
+import Families from "./pages_1/Families";
+import SettingsPage from "./pages_1/SettingsPage";
 
 
 
