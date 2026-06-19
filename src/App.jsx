@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import './App.css'
+import JournalPage from "./pages/JournalPage";
 
 import DashboardPage from "./pages/DashboardPage";
 import DuesReportPage from  "./pages/DuesReportPage";
