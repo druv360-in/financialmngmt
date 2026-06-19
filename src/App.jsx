@@ -6,7 +6,7 @@ import DashboardPage from "./pages/DashboardPage";
 import DuesReportPage from  "./pages/DuesReportPage";
 import BillsManagementPage from "./pages/BillsManagementPage";
 import Page5 from "./pages/Page5";
-import CategoryPage from "./pages/CategoryPage";
+import CategoryPage from "./pages/categoryPage";
 
 
 import categoryReportPage from "./pages/CategoryReportPage";
@@ -15,9 +15,9 @@ import CashBankPage from "./pages/CashBankPage";
 import CategoryWiseReportPage from './pages/CategoryWiseReportPage'
 import DebitCategoryWiseReportPage from './pages/DebitCategoryWiseReportPage'
 import FinancialReportsPage from './pages/FinancialReportsPage'
-import FamiliesPage from "./Pages/FamiliesPage";
-import Families from "./Pages/Families";
-import SettingsPage from "./Pages/SettingsPage";
+import FamiliesPage from "./pages/FamiliesPage";
+import Families from "./pages/Families";
+import SettingsPage from "./pages/SettingsPage";
 
 
 
