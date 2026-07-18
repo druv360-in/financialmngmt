@@ -2,31 +2,7 @@ import { Pencil, Trash2 } from "lucide-react";
 
 function Receipt_Card({ receipts, onEditReceipt , onDeleteReceipt }){
 
-  const defaultReceipts = [
-    {
-      title: "Sunday Offering",
-      receiptNo: "RCP1000",
-      paymentMethod: "Cash",
-      payer: "Congregation",
-      category: "Tithes & Offerings",
-      date: "2026-04-13",
-      amount: 2500,
-      description: "Weekly Sunday offering collection",
-    },
-
-    {
-      title: "Building Fund Donation",
-      receiptNo: "RCP1001",
-      paymentMethod: "Check",
-      payer: "John Smith",
-      category: "Special Offerings",
-      date: "2026-04-14",
-      amount: 1000,
-      description: "Special donation for building renovation",
-    },
-  ];
-
-  const data = receipts || defaultReceipts;
+const data = receipts;
 
   if (!data.length) {
     return (
@@ -93,8 +69,35 @@ function Receipt_Card({ receipts, onEditReceipt , onDeleteReceipt }){
                     {new Date(receipt.date).toLocaleDateString("en-GB")}
                   </span>
                 </p>
+                
 
               </div>
+              {receipt.categories?.some(
+  (item) => item.category === "Monthly Collection"
+) &&
+  receipt.fromMonth &&
+  receipt.toMonth && (
+    <div className="mt-3">
+      <span className="inline-flex items-center rounded-md bg-purple-100 px-3 py-1 text-xs font-medium text-purple-700">
+        Period:{" "}
+        {new Date(receipt.fromMonth + "-01").toLocaleString(
+          "default",
+          {
+            month: "short",
+            year: "numeric",
+          }
+        )}{" "}
+        -{" "}
+        {new Date(receipt.toMonth + "-01").toLocaleString(
+          "default",
+          {
+            month: "short",
+            year: "numeric",
+          }
+        )}
+      </span>
+    </div>
+  )}
 
              <p className="mt-3 text-xs sm:text-sm text-gray-500 leading-relaxed">
                 {receipt.description}

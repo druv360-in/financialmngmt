@@ -122,13 +122,14 @@ const handleUpdate = () => {
   date: form.receiptDate,
   paymentMethod: form.paymentMethod,
   description: form.description,
-
-  categories: [
-    {
-      category: form.category,
-      amount: Number(form.amount),
-    },
-  ],
+categories: [
+  {
+    ...r.categories[0],
+    category: form.category,
+    amount: Number(form.amount),
+  },
+  ...r.categories.slice(1),
+],
 }
         : r
     )

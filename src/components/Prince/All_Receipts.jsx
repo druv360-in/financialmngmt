@@ -40,19 +40,24 @@ function All_Receipts({  receipts,onAddReceipt , onEditReceipt, onDeleteReceipt}
         selectedPayer === "All Payers" ||
         receipt.payer === selectedPayer;
 
-      const matchesSearch =
-        receipt.title
-          .toLowerCase()
-          .includes(search.toLowerCase()) ||
-        receipt.payer
-          .toLowerCase()
-          .includes(search.toLowerCase()) ||
-        receipt.category
-          .toLowerCase()
-          .includes(search.toLowerCase()) ||
-        receipt.receiptNo
-          .toLowerCase()
-          .includes(search.toLowerCase());
+     const matchesSearch =
+  receipt.title
+    ?.toLowerCase()
+    .includes(search.toLowerCase()) ||
+
+  receipt.payer
+    ?.toLowerCase()
+    .includes(search.toLowerCase()) ||
+
+  receipt.receiptNo
+    ?.toLowerCase()
+    .includes(search.toLowerCase()) ||
+
+  receipt.categories?.some(cat =>
+    cat.category
+      ?.toLowerCase()
+      .includes(search.toLowerCase())
+  );
 
       return (
         matchesYear &&

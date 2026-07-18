@@ -1,3 +1,5 @@
+import {useState} from "react";
+import { FaDownload } from "react-icons/fa";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -130,6 +132,7 @@ const utilitiesTotal = utilitiesData.reduce(
 );
 export default function ExpensesByCategory() {
 
+const [openSection, setOpenSection] = useState("");
 
 const handleDownloadExpense = () => {
   const doc = new jsPDF();
@@ -200,20 +203,53 @@ const handleDownloadExpense = () => {
 
 
   return (
-    <div className="border border-gray-200 rounded-md p-4">
+    <div className="w-full px-2 sm:px-4 lg:px-6 p-3 py-4">
 
-      <div className="flex justify-between items-center mb-2">
-        <h3 className="font-semibold text-sm">
-          Utilities
-        </h3>
+      {/* Main Report Box */}
+      <div className="w-full bg-white border border-gray-300 rounded-lg p-3 md:p-5 shadow-sm">
 
-       <button
-  onClick={handleDownloadExpense}
-  className="bg-black text-white px-3 py-1 rounded text-xs"
->
-  Download PDF
-</button>
+        <h1 className="text-xl sm:text-2xl font-bold mb-1">
+          Debit-wise Annual Reports
+        </h1>
+
+        <p className="text-gray-500 text-xs mb-6">
+          Financial Year 2026-2027
+        </p>
+
+        {/* Income Heading */}
+        <h2 className="font-bold text-base mb-4">
+          Bills (Expenses) by Category
+        </h2>
+
+    <div className="bg-white rounded-xl p-4 mb-4 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100">
+
+      <div className="flex items-center justify-between bg-gray-50 px-3 py-3 rounded-lg mb-2">
+        <button
+          onClick={() =>
+            setOpenSection(
+              openSection === "utilities" ? "" : "utilities"
+            )
+          }
+          className="flex items-center gap-2 font-semibold text-sm"
+        >
+          <span>
+            {openSection === "utilities" ? "▲" : "▼"}
+          </span>
+      
+          <span>Utilities</span>
+        </button>
+      
+        <button
+          onClick={handleDownloadExpense}
+          className="bg-black text-white p-2 rounded-lg hover:bg-gray-800 transition-all duration-300"
+        >
+          <FaDownload />
+        </button>
       </div>
+      
+
+{openSection === "utilities" && (
+<>
 
       <div className="text-right text-xs text-gray-500 mb-2">
         {utilitiesData.length} bills • ₹{utilitiesTotal.toLocaleString()}
@@ -305,7 +341,11 @@ const handleDownloadExpense = () => {
           ₹{utilitiesTotal.toLocaleString()}
         </div>
       </div>
+      </>
+)}
 
     </div>
+  </div> 
+ </div>  
   );
 }
