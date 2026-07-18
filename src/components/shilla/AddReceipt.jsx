@@ -116,13 +116,13 @@ function Dropdown({
   );
 }
 
-export default function AddReceipt({ onClose , setReceipts}) {
+export default function AddReceipt({ onClose , setReceipts,receipts}) {
   const [form, setForm] = useState({
     title: '',
     payer: '',
     customPayer: '',
     primaryCategory: '',
-    primaryAmount: '0.00',
+    primaryAmount: '',
     receiptDate: '',
     paymentMethod: '',
     description: '',
@@ -130,6 +130,8 @@ export default function AddReceipt({ onClose , setReceipts}) {
   
 const [fromMonth, setFromMonth] = useState("");
 const [toMonth, setToMonth] = useState("");
+
+
 
 const calculateMonths = () => {
   if (!fromMonth || !toMonth) return 0;
@@ -163,47 +165,57 @@ const monthlyAmount =
 const primaryAmount = isAutoCalculated
   ? months * monthlyAmount
   : Number(form.primaryAmount || 0);
-
 const handleAddReceipt = () => {
   if (!validateForm()) return;
 
-  const receiptNo = `RCP${crypto.randomUUID()}`;
-const newReceipt = {
-  receiptNo,
-  title: form.title,
-  payer:
-    form.payer === "other"
-      ? form.customPayer
-      : form.payer,
-  paymentMethod: form.paymentMethod,
-  date: form.receiptDate,
-  fromMonth,
-  toMonth,
-  months,
+  const nextNumber =
+    receipts.length > 0
+      ? Math.max(
+          ...receipts.map(r =>
+            Number(r.receiptNo.replace("RCP", ""))
+          )
+        ) + 1
+      : 1001;
 
-  description: form.description,
+  const receiptNo = `RCP${nextNumber}`;
 
-  categories: [
-    {
-      category: form.primaryCategory,
-   amount: primaryAmount,
-    },
+  const newReceipt = {
+    receiptNo,
+    title: form.title,
+    
+payer:
+  form.payer === "other"
+    ? form.customPayer
+    : form.payer,
 
-    ...additionalCategories.map((category) => ({
-      category,
-      amount: Number(
-        additionalAmounts[category] || 0
-      ),
-    })),
-  ],
+    paymentMethod: form.paymentMethod,
+    date: form.receiptDate,
+    fromMonth,
+    toMonth,
+    months,
+    description: form.description,
 
-  amount: totalAmount,
-};
+    categories: [
+      {
+        category: form.primaryCategory,
+        amount: primaryAmount,
+      },
+      ...additionalCategories.map(category => ({
+        category,
+        amount: Number(
+          additionalAmounts[category] || 0
+        ),
+      })),
+    ],
 
-  setReceipts((prev) => [...prev, newReceipt]);
+    amount: totalAmount,
+  };
+
+  setReceipts(prev => [...prev, newReceipt]);
 
   onClose();
 };
+
   const [additionalCategories, setAdditionalCategories] = useState([]);
   const [additionalAmounts, setAdditionalAmounts] = useState({});
   const [errors, setErrors] = useState({});
@@ -220,6 +232,9 @@ const newReceipt = {
 
     if (!form.title.trim()) newErrors.title = true;
     if (!form.payer) newErrors.payer = true;
+    if (Number(form.primaryAmount) < 0) {
+  newErrors.primaryAmount = true;
+}
     if (!form.primaryCategory) newErrors.primaryCategory = true;
     if (
   form.primaryCategory !== "Monthly Collection" &&
@@ -249,17 +264,26 @@ const newReceipt = {
         : [...prev, category]
     );
 
-    if (!additionalAmounts[category]) {
-      setAdditionalAmounts(prev => ({
-        ...prev,
-        [category]: '0.00',
-      }));
-    }
+    if (!(category in additionalAmounts)) {
+  setAdditionalAmounts(prev => ({
+    ...prev,
+    [category]: '',
+  }));
+}
   };
 
-  const additionalOptions = CATEGORIES.filter(
-    item => item !== form.primaryCategory
-  );
+ const additionalOptions = CATEGORIES.filter(item => {
+  if (item === form.primaryCategory) return false;
+
+  if (
+    form.payer === "other" &&
+    item === "Monthly Collection"
+  ) {
+    return false;
+  }
+
+  return true;
+});
 const totalAmount =
   primaryAmount +
   additionalCategories.reduce(
@@ -312,14 +336,29 @@ const totalAmount =
                 Payer <span className="text-red-500">*</span>
               </label>
 
-              <Dropdown
-                value={form.payer}
-                onChange={value => setForm({ ...form, payer: value })}
-                placeholder="Select payer"
-                options={PAYERS}
-                isObject
-                error={errors.payer}
-              />
+            <Dropdown
+  value={form.payer}
+  onChange={value => {
+    setForm(prev => ({
+      ...prev,
+      payer: value,
+      primaryCategory:
+        value === "other" &&
+        prev.primaryCategory === "Monthly Collection"
+          ? ""
+          : prev.primaryCategory,
+    }));
+
+    if (value === "other") {
+      setFromMonth("");
+      setToMonth("");
+    }
+  }}
+  placeholder="Select payer"
+  options={PAYERS}
+  isObject
+  error={errors.payer}
+/>
 
               {form.payer === 'other' && (
                 <input
@@ -339,22 +378,28 @@ const totalAmount =
               Primary Category <span className="text-red-500">*</span>
             </label>
 
-            <Dropdown
-              value={form.primaryCategory}
-              onChange={value => {
-                setForm({
-                  ...form,
-                  primaryCategory: value,
-                });
+          <Dropdown
+  value={form.primaryCategory}
+  onChange={value => {
+    setForm({
+      ...form,
+      primaryCategory: value,
+    });
 
-                setAdditionalCategories(prev =>
-                  prev.filter(item => item !== value)
-                );
-              }}
-              placeholder="Select primary category"
-              options={CATEGORIES}
-              error={errors.primaryCategory}
-            />
+    setAdditionalCategories(prev =>
+      prev.filter(item => item !== value)
+    );
+  }}
+  placeholder="Select primary category"
+  options={
+    form.payer === "other"
+      ? CATEGORIES.filter(
+          category => category !== "Monthly Collection"
+        )
+      : CATEGORIES
+  }
+  error={errors.primaryCategory}
+/>
           </div>
 
 
@@ -400,20 +445,24 @@ const totalAmount =
                 </label>
 
                 <input
-                  type="number"
-                  value={
-                    additionalAmounts[category] ||
-                    "0.00"
-                  }
-                  onChange={(e) =>
-                    setAdditionalAmounts(prev => ({
-                      ...prev,
-                      [category]:
-                        e.target.value,
-                    }))
-                  }
-                  className={`${inputClass} h-[32px] bg-white`}
-                />
+  type="number"
+  placeholder="0.00"
+  min="0"
+  value={additionalAmounts[category] || ""}
+  onChange={(e) => {
+    const value = e.target.value;
+    
+
+    if (Number(value) >= 0 || value === "") {
+      setAdditionalAmounts(prev => ({
+        ...prev,
+        [category]: value,
+      }));
+    }
+  }}
+  onWheel={(e) => e.target.blur()}
+  className={`${inputClass} h-[32px] bg-white`}
+/>
               </div>
             )}
           </div>
@@ -490,23 +539,24 @@ const totalAmount =
           <div className="grid grid-cols-2 gap-3.5">
             <div className="flex flex-col gap-0.5">
               <label className={labelClass}>Primary Category Amount *</label>
-
-             <input
+<input
   type="number"
   name="primaryAmount"
+  min="0"
   value={
-  isAutoCalculated
-    ? primaryAmount
-    : form.primaryAmount
-}
+    isAutoCalculated
+      ? primaryAmount
+      : form.primaryAmount
+  }
+  placeholder="0.00"
   onChange={handleChange}
+  onWheel={(e) => e.preventDefault()}
   readOnly={isAutoCalculated}
-
-className={`${inputClass} h-[44px] ${
-  isAutoCalculated
-    ? "bg-gray-100 cursor-not-allowed"
-    : ""
-}`}
+  className={`${inputClass} h-[44px] ${
+    isAutoCalculated
+      ? "bg-gray-100 cursor-not-allowed"
+      : ""
+  }`}
 />
             </div>
 

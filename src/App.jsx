@@ -1,26 +1,20 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import './App.css'
 import JournalPage from "./pages_1/JournalPage";
-
 import DashboardPage from "./pages_1/DashboardPage";
 import DuesReportPage from  "./pages_1/DuesReportPage";
 import BillsManagementPage from "./pages_1/BillsManagementPage";
 import Page5 from "./pages_1/Page5";
 import CategoryPage from "./pages_1/categoryPage";
-
-
-import categoryReportPage from "./pages_1/CategoryReportPage";
+import CategoryReportPage from "./pages_1/CategoryReportPage";
 import CashBankPage from "./pages_1/CashBankPage";
-
-import CategoryWiseReportPage from './pages_1/CategoryWiseReportPage'
-import DebitCategoryWiseReportPage from './pages_1/DebitCategoryWiseReportPage'
-import FinancialReportsPage from './pages_1/FinancialReportsPage'
+import FinancialReportsPage from "./pages_1/FinancialReportsPage";
 import FamiliesPage from "./pages_1/FamiliesPage";
 import Families from "./pages_1/Families";
 import SettingsPage from "./pages_1/SettingsPage";
-
-
-
+import BulkDues from "./pages_1/BulkDues";
+import UnpaidDuesPage from "./pages_1/UnpaidDuesPage";
+import DebitCategoryWiseReportPage from "./pages_1/DebitCategoryWiseReportPage";
 
 export default function App() {
   return (
@@ -41,8 +35,11 @@ export default function App() {
       <Route path="/" element={<Navigate to="/families" replace />} />
       <Route path="/families" element={<Families />} />
 
-      {/* <Route path="/" element={<Navigate to="/unpaid-dues" replace />} /> 
-      <Route path="/unpaid-dues" element={<DuesReportPage />} /> */}
+      <Route path="/" element={<Navigate to="/bulk-dues" replace />} />
+      <Route path="/bulk-dues" element={<BulkDues />} />
+
+      <Route path="/" element={<Navigate to="/unpaid-dues" replace />} /> 
+      <Route path="/unpaid-dues" element={<UnpaidDuesPage/>} />
 
       <Route path="/" element={<Navigate to="/cash-bank" replace />} /> 
       <Route path="/cash-bank" element={<CashBankPage />} />
@@ -50,12 +47,15 @@ export default function App() {
       <Route path="/" element={<Navigate to="/reports" replace />} />
       <Route path="/reports" element={<FinancialReportsPage />} />
 
+      <Route path="/" element={<Navigate to="/ledger" replace />} />
+      <Route path="/ledger" element={<JournalPage />} />
+
       <Route path="/" element={<Navigate to="/settings" replace />} />
       <Route path="/settings" element={<SettingsPage />} />
 
  
     
-      <Route path="/category-wise-report"       element={<CategoryWiseReportPage />} />
+      <Route path="/category-wise-report"       element={<CategoryReportPage />} />
       <Route path="/debit-category-wise-report" element={<DebitCategoryWiseReportPage />} />
       <Route path="/dues-report"                element={<DuesReportPage />} />
       <Route path="/familiespage" element={<FamiliesPage />} />

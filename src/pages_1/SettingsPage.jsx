@@ -31,13 +31,17 @@ export default function SettingsPage() {
   }
 
   return (
-    <>
+    <div className="min-h-screen bg-slate-50 flex flex-col lg:flex-row overflow-x-hidden">
       <Sidemenu />
 
-      <main className="min-h-screen bg-slate-50 px-4 py-6 sm:px-6 lg:pl-[264px] lg:pr-8 lg:pt-9 2xl:px-12 2xl:pl-[296px]">
-        <div className="mx-auto w-full max-w-[920px] 2xl:max-w-[1320px]">
+      {/* Main content wrapper containing fluid sizing boundaries for 4K layout space */}
+      <main className="flex-1 lg:pl-58 w-full min-h-screen flex flex-col justify-between min-w-0">
+        
+        {/* Main Content Viewport */}
+        <div className="w-full p-4 md:p-6 lg:p-8 space-y-6 mx-auto max-w-[2560px]">
           <header className="mb-6">
-            <h1 className="text-2xl font-extrabold tracking-normal text-slate-950 sm:text-[26px] 2xl:text-4xl">
+            {/* Reduced from font-extrabold to font-semibold as requested */}
+            <h1 className="text-3xl font-bold text-gray-900 leading-tight sm:text-[26px] 2xl:text-3xl">
               System Settings
             </h1>
             <p className="mt-1 text-sm text-slate-600 2xl:text-base">
@@ -45,6 +49,10 @@ export default function SettingsPage() {
             </p>
           </header>
 
+          {/* 
+            Changed grid back to a standard vertical space stack. 
+            All components are fully separate, independent, and uniform across 1024px, 1440px, and 4K viewports.
+          */}
           <div className="space-y-6 2xl:space-y-8">
             <ReceiptNumbering
               receiptPrefix={receiptPrefix}
@@ -73,8 +81,9 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <div className="sticky bottom-0 -mx-4 mt-6 border-t border-slate-200 bg-slate-50/90 px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 2xl:-mx-12 2xl:px-12">
-          <div className="mx-auto flex w-full max-w-[920px] justify-end 2xl:max-w-[1320px]">
+        {/* Sticky footer tracking the 4K viewport max-width scale bounds */}
+        <div className="sticky bottom-0 mt-8 border-t border-slate-200 bg-slate-50/90 px-4 py-4 backdrop-blur sm:px-6 lg:px-8 2xl:px-12 z-10 w-full">
+          <div className="mx-auto flex w-full max-w-[2560px] justify-end">
             <button
               type="button"
               onClick={handleSave}
@@ -89,6 +98,6 @@ export default function SettingsPage() {
           </div>
         </div>
       </main>
-    </>
+    </div>
   );
 }

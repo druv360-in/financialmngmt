@@ -84,28 +84,27 @@ const recentReceipts = [
 ]
 
 export default function DashboardPage() {
-    
-  
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div className="lg:col-span-1">
-            <Sidemenu />
-          </div>
+    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
+      {/* Sidemenu left untouched, handled externally via layout properties */}
+      <Sidemenu />
 
-          <div className="lg:col-span-3 space-y-6">
-            <FinancialYearBanner />
-            <TotalDisplayCards />
-            <CurrentBalances />
+      {/* Main content wrapper with exact padding matching your sidebar width */}
+      <main className="flex-1 lg:pl-58 w-full min-h-screen">
+        {/* Full screen layout container supporting fluid 4K scaling up to 2560px max width */}
+        <div className="w-full p-4 md:p-6 lg:p-8 space-y-6 mx-auto max-w-[2560px]">
+          <FinancialYearBanner />
+          <TotalDisplayCards />
+          
+          {/* Kept separated and stacked vertically as requested */}
+          <CurrentBalances />
 
-            <RecentCards
-              recentBills={recentBills}
-              recentReceipts={recentReceipts}
-            />
-          </div>
+          <RecentCards
+            recentBills={recentBills}
+            recentReceipts={recentReceipts}
+          />
         </div>
-      </div>
+      </main>
     </div>
   )
 }

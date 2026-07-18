@@ -1,7 +1,8 @@
+import { useState } from "react";
 import jsPDF from "jspdf";
 import { autoTable } from "jspdf-autotable";
-import IncomeByCategory from "./IncomeByCategory";
-import ExpensesByCategory from "./ExpensesByCategory";
+import { FaDownload } from "react-icons/fa";
+import IncomeByCategory from "./IncomeByCategory"
 
 
 const monthlyCollectionData = [
@@ -237,6 +238,7 @@ const tithesTotal = tithesOfferingsData.reduce(
 );
 
 export default function CategoryWiseAnnualReport() {
+  const [openSection, setOpenSection] = useState("");
 
   const handleDownloadMonthlyCollection = () => {
     const doc = new jsPDF();
@@ -378,7 +380,7 @@ const handleDownloadTithes = () => {
       <div className="w-full bg-white border border-gray-300 rounded-lg p-3 md:p-5 shadow-sm">
 
         <h1 className="text-xl sm:text-2xl font-bold mb-1">
-          Category-wise Annual Reports
+          Income-wise Annual Reports
         </h1>
 
         <p className="text-gray-500 text-xs mb-6">
@@ -392,21 +394,32 @@ const handleDownloadTithes = () => {
 
         {/* Monthly Collection */}
 
-        <div className="border border-gray-200 rounded-md p-4 mb-4">
+        <div className="bg-white rounded-xl p-4 mb-4 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100">
 
-          <div className="flex justify-between sm:items-center gap-2 mb-2">
-            <h3 className="font-semibold text-sm">
-              Monthly Collection
-            </h3>
+          <div className="flex items-center justify-between bg-gray-50 px-3 py-3 rounded-lg mb-2">
+            <button
+  onClick={() =>
+    setOpenSection(
+      openSection === "monthly" ? "" : "monthly"
+    )
+  }
+  className="flex items-center gap-2 font-semibold text-sm"
+>
+  <span>
+{openSection === "monthly" ? "▲" : "▼"}
+  </span>
 
+  <span>Monthly Collection</span>
+</button>
             <button
              onClick={handleDownloadMonthlyCollection}
-             className="bg-black text-white px-3 py-1 rounded text-xs"
+             className="bg-black text-white p-2 rounded-lg hover:bg-gray-800 transition-all"
              >
-             Download PDF
+             <FaDownload/>
             </button>
           </div>
-
+          {openSection === "monthly" && (
+           <>
           <div className="text-right text-xs text-gray-500 mb-2">
              {monthlyCollectionData.length} receipts • ₹{totalAmount.toLocaleString()}
           </div>
@@ -487,29 +500,47 @@ const handleDownloadTithes = () => {
               Category Total
             </div>
 
-            <div className="text-green-700 font-bold text-lg">
-                ₹{totalAmount.toLocaleString()}
-            </div>
+           <div className="text-green-700 font-bold text-lg">
+  ₹{totalAmount.toLocaleString()}
+</div>
 
-        </div>
-      </div>  
+</div>
+
+</>
+)}
+
+</div>
 
         {/* Special Offerings Component */}
         <IncomeByCategory />
 
         {/* Tithes & Offerings */}
 
-        <div className="border border-gray-200 rounded-md p-4 mb-6">
+<div className="bg-white rounded-xl p-4 mb-4 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100">
 
-          <div className="flex justify-between sm:items-center gap-2 mb-2">
-            <h3 className="font-semibold text-sm">
-              Tithes & Offerings
-            </h3>
-
-            <button className="bg-black text-white px-3 py-1 rounded text-xs" onClick={handleDownloadTithes}>
-              Download PDF
+<div className="flex items-center justify-between bg-gray-50 px-3 py-3 rounded-lg mb-3">
+  <button
+          onClick={() =>
+            setOpenSection(
+      openSection === "tithes" ? "" : "tithes"
+    )
+  }
+  className="flex items-center gap-2 font-semibold text-sm"
+>
+            
+            <span>{openSection === "tithes" ? "▲" : "▼"}</span>
+            <span>Tithes & Offerings</span>
+          </button>
+          <button
+             onClick={handleDownloadTithes}
+             className="bg-black text-white p-2 rounded-lg hover:bg-gray-800 transition-all duration-300"
+             >
+             <FaDownload/>
             </button>
           </div>
+           
+          {openSection === "tithes" && (
+          <>
 
           <div className="text-right text-xs text-gray-500 mb-2">
              {tithesOfferingsData.length} receipts • ₹{tithesTotal.toLocaleString()}
@@ -580,17 +611,9 @@ const handleDownloadTithes = () => {
               ₹{tithesTotal.toLocaleString()}
             </div>
           </div>
-
+        </>
+        )} 
         </div>
-
-        {/* Expense Heading */}
-
-        <h2 className="font-bold text-base mb-4">
-          Bills (Expenses) by Category
-        </h2>
-
-        {/* Expense Component */}
-        <ExpensesByCategory />
 
       </div>
 

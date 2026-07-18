@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { FaDownload } from "react-icons/fa";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -182,22 +184,37 @@ doc.text(
 
 export default function IncomeByCategory() {
 
+  const [openSection, setOpenSection] = useState("");
+
 
   return (
-    <div className="border border-gray-200 rounded-md p-4 mb-4">
+    <div className="bg-white rounded-xl p-4 mb-4 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100">
+<div className="flex items-center justify-between bg-gray-50 px-3 py-3 rounded-lg mb-2">
+  <button
+    onClick={() =>
+      setOpenSection(
+        openSection === "special" ? "" : "special"
+      )
+    }
+    className="flex items-center gap-2 font-semibold text-sm"
+  >
+    <span>
+      {openSection === "special" ? "▲" : "▼"}
+    </span>
 
-      <div className="flex justify-between items-center mb-2">
-        <h3 className="font-semibold text-sm">
-          Special Offerings
-        </h3>
+    <span>Special Offerings</span>
+  </button>
 
-        <button
-        onClick={handleDownloadIncome}
-        className="bg-black text-white px-3 py-1 rounded text-xs"
-        >
-          Download PDF
-        </button>
-      </div>
+  <button
+    onClick={handleDownloadIncome}
+    className="bg-black text-white p-2 rounded-lg hover:bg-gray-800 transition-all duration-300"
+  >
+    <FaDownload />
+  </button>
+</div>
+
+{openSection === "special" && (
+<>
 
       <div className="text-right text-xs text-gray-500 mb-2">
         {specialOfferingsData.length} receipts • ₹{specialOfferingsTotal.toLocaleString()}
@@ -281,6 +298,8 @@ export default function IncomeByCategory() {
           ₹{specialOfferingsTotal.toLocaleString()}
         </div>
       </div>
+      </>
+)}
 
     </div>
   );

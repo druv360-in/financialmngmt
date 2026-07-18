@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Sidemenu from "../components/binoj/Sidemenu";
 import ReceiptsManagement from "../components/arathi/Receiptsmanagement";
@@ -12,7 +12,16 @@ function Page5() {
   const [showEditReceipt, setShowEditReceipt] = useState(false);
 
   // MAIN DATA SOURCE
-  const [receipts, setReceipts] = useState([]);
+  const [receipts, setReceipts] = useState(() => {
+  const savedReceipts = localStorage.getItem("receipts");
+  return savedReceipts ? JSON.parse(savedReceipts) : [];
+});
+useEffect(() => {
+  localStorage.setItem(
+    "receipts",
+    JSON.stringify(receipts)
+  );
+}, [receipts]);
 
   // RECEIPT CURRENTLY BEING EDITED
   const [selectedReceipt, setSelectedReceipt] = useState(null);
@@ -67,6 +76,7 @@ function Page5() {
       {/* ADD RECEIPT */}
       {showAddReceipt && (
         <AddReceipt
+         receipts={receipts}
           onClose={() => setShowAddReceipt(false)}
           setReceipts={setReceipts}
         />
